@@ -1,0 +1,8 @@
+https://github.com/apache/arrow/releases/tag/apache-arrow-2.0.0
+https://www.apache.org/dyn/closer.lua/arrow/arrow-2.0.0/apache-arrow-2.0.0.tar.gz
+cmake -DCMAKE_BUILD_TYPE=Debug -DARROW_BUILD_EXAMPLES=ON -DARROW_PARQUET=ON -DPARQUET_BUILD_EXAMPLES=ON
+cmake -DCMAKE_BUILD_TYPE=Debug -DARROW_BUILD_EXAMPLES=ON -DARROW_PARQUET=ON -DPARQUET_BUILD_EXAMPLES=ON
+export LD_LIBRARY_PATH=~/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/src/debug/
+
+Python to create sensible test parquet files
+https://mungingdata.com/python/writing-parquet-pandas-pyspark-koalas/

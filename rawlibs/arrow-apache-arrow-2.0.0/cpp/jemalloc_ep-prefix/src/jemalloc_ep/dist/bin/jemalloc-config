@@ -1,0 +1,83 @@
+#!/bin/sh
+
+usage() {
+	cat <<EOF
+Usage:
+  /home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/jemalloc_ep-prefix/src/jemalloc_ep/dist/bin/jemalloc-config <option>
+Options:
+  --help | -h  : Print usage.
+  --version    : Print jemalloc version.
+  --revision   : Print shared library revision number.
+  --config     : Print configure options used to build jemalloc.
+  --prefix     : Print installation directory prefix.
+  --bindir     : Print binary installation directory.
+  --datadir    : Print data installation directory.
+  --includedir : Print include installation directory.
+  --libdir     : Print library installation directory.
+  --mandir     : Print manual page installation directory.
+  --cc         : Print compiler used to build jemalloc.
+  --cflags     : Print compiler flags used to build jemalloc.
+  --cppflags   : Print preprocessor flags used to build jemalloc.
+  --cxxflags   : Print C++ compiler flags used to build jemalloc.
+  --ldflags    : Print library flags used to build jemalloc.
+  --libs       : Print libraries jemalloc was linked against.
+EOF
+}
+
+prefix="/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/jemalloc_ep-prefix/src/jemalloc_ep/dist"
+exec_prefix="/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/jemalloc_ep-prefix/src/jemalloc_ep/dist"
+
+case "$1" in
+--help | -h)
+	usage
+	exit 0
+	;;
+--version)
+	echo "5.2.1-0-gea6b3e973b477b8061e0076bb257dbd7f3faa756"
+	;;
+--revision)
+	echo "2"
+	;;
+--config)
+	echo "AR=/usr/bin/ar CC=/usr/bin/cc --prefix=/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/jemalloc_ep-prefix/src/jemalloc_ep/dist/ --with-jemalloc-prefix=je_arrow_ --with-private-namespace=je_arrow_private_ --without-export --disable-shared --disable-cxx --disable-libdl --disable-initial-exec-tls"
+	;;
+--prefix)
+	echo "/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/jemalloc_ep-prefix/src/jemalloc_ep/dist"
+	;;
+--bindir)
+	echo "/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/jemalloc_ep-prefix/src/jemalloc_ep/dist/bin"
+	;;
+--datadir)
+	echo "/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/jemalloc_ep-prefix/src/jemalloc_ep/dist/share"
+	;;
+--includedir)
+	echo "/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/jemalloc_ep-prefix/src/jemalloc_ep/dist/include"
+	;;
+--libdir)
+	echo "/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/jemalloc_ep-prefix/src/jemalloc_ep/dist/lib"
+	;;
+--mandir)
+	echo "/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/jemalloc_ep-prefix/src/jemalloc_ep/dist/share/man"
+	;;
+--cc)
+	echo "/usr/bin/cc"
+	;;
+--cflags)
+	echo "-std=gnu11 -Wall -Wextra -Wsign-compare -Wundef -Wno-format-zero-length -pipe -g3 -fvisibility=hidden -O3 -funroll-loops"
+	;;
+--cppflags)
+	echo "-D_GNU_SOURCE -D_REENTRANT"
+	;;
+--cxxflags)
+	echo ""
+	;;
+--ldflags)
+	echo " "
+	;;
+--libs)
+	echo "-lm  -pthread"
+	;;
+*)
+	usage
+	exit 1
+esac

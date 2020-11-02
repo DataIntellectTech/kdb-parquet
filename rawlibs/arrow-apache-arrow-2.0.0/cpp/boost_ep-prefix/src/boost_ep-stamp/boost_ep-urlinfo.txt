@@ -1,0 +1,3 @@
+repository='external project URL'
+module='https://dl.bintray.com/ursalabs/arrow-boost/boost_1_71_0.tar.gz;https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.tar.gz;https://github.com/boostorg/boost/archive/boost-1.71.0.tar.gz;https://github.com/ursa-labs/thirdparty/releases/download/latest/boost_1_71_0.tar.gz'
+tag=''

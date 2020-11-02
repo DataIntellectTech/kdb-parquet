@@ -1,0 +1,1 @@
+cmd='./configure;AR=/usr/bin/ar;CC=/usr/bin/cc;--prefix=/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/jemalloc_ep-prefix/src/jemalloc_ep/dist/;--with-jemalloc-prefix=je_arrow_;--with-private-namespace=je_arrow_private_;--without-export;--disable-shared;--disable-cxx;--disable-libdl;--disable-initial-exec-tls'

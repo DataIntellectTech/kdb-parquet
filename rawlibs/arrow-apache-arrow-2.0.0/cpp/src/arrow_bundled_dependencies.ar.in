@@ -1,0 +1,9 @@
+CREATE /home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/src/debug/libarrow_bundled_dependencies.a
+ADDLIB $<TARGET_FILE:boost_system_static>
+ADDLIB $<TARGET_FILE:boost_filesystem_static>
+ADDLIB $<TARGET_FILE:boost_regex_static>
+ADDLIB $<TARGET_FILE:thrift::thrift>
+ADDLIB $<TARGET_FILE:jemalloc::jemalloc>
+ADDLIB $<TARGET_FILE:utf8proc::utf8proc>
+SAVE
+END

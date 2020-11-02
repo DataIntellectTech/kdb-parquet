@@ -1,0 +1,11 @@
+prefix=/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/protobuf_ep-install
+exec_prefix=/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/protobuf_ep-install
+libdir=/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/protobuf_ep-install/lib
+includedir=/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/protobuf_ep-install/include
+
+Name: Protocol Buffers
+Description: Google's Data Interchange Format
+Version: 3.12.1.0
+Libs: -L${libdir} -lprotobuf -lpthread
+Cflags: -I${includedir} -lpthread
+Conflicts: protobuf-lite
