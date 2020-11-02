@@ -18,7 +18,6 @@ for(int i=0;i<n;i++) {
 int arrowtoint64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
     auto int64_array = std::static_pointer_cast<arrow::Int64Array>(arrow->chunk(0));
     std::cout << "num chunks is " << arrow->num_chunks() << std::endl;
     ns=ktn(KJ,n);
@@ -33,9 +32,11 @@ int arrowtoStringvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 //   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
     auto String_array = std::static_pointer_cast<arrow::StringArray>(arrow->chunk(0));
     std::cout << "num chunks is " << arrow->num_chunks() << std::endl;
-    ns=ktn(KS,n);
+    ns=ktn(0,n);
     for(int i=0;i<n;i++) {
-        kS(ns)[i]=ss((char *)String_array->GetString(i).c_str());
+        std::string nn = String_array->GetString(i);
+        int l=nn.length();
+        kK(ns)[i]=kpn((char *)nn.c_str(),l);
     }
     return 0;
 }
