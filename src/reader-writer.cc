@@ -25,6 +25,7 @@
 #include <parquet/exception.h>
 #include "Kx/k.h"
 #include "tokdbfromarrow.hpp"
+#include "fromkdbtoarrow.hpp"
 std::exception myexception;
 arrow::Status s;
 int arrowtabletokdb( K &ns, std::shared_ptr<arrow::Table> &table);
