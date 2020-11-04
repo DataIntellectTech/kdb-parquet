@@ -1,0 +1,33 @@
+Can try running the code straight away and should work if the correct dependencies are installed otherwise may need to install:
+pyarrow
+pandas
+numpy
+I suppose in linux the command is just something like python csv_to_parquet.py and the appropriate csv and corresponding parquet files should be created
+
+
+the code from the bottom of the import statements up until the write_parquet_file function is creating the csv file with num_rows
+number of rows and random data of different types. I have set the column names as:
+writer.writerow(["Timestamp","float32","float64","string","bool","uint16","uint32","uint64","Date",])
+
+under each of the 9 columns headers I write random data of different types.
+random string is given by the code:
+ "".join(rand.choice(string.ascii_uppercase + string.digits) for _ in range(10)),
+
+three different types of integer and a boolean are also created:
+bool(rand.getrandbits(1)),\
+                         rand.randint(1,20),\
+                     rand.randint(1,20),\
+                     rand.randint(1,20),\
+
+
+write_parque_file reads in the csv created and parse_dates is used to read in the columns that I have named Timestamp and Date :
+ df = pd.read_csv('./csv1.csv',parse_dates=['Timestamp',"Date"])
+the types of parquet data desired to convert the csv file to are specified in the fields array.
+and the parquet file is produced in the line of code:
+
+ pq.write_table(table1, 'parquet1.parquet',coerce_timestamps="ms")
+
+
+Finally the read_parquet_file function just reads in the parquet file into a pandas dataframe to make sure the data is as expected
+it also returns the data types of each column:
+return pfile.to_pandas(),"Schema: {}".format(pfile.schema)
