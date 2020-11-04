@@ -58,10 +58,17 @@ K init(K x) {
     return (K)0;
 }
 
+extern"C"
+K settabletofile(K file,K tab)
+{   char* s=file->s;
+    std::string ms(s);
+    int r=ksettabletofile(tab,ms);
+    return ki(r);
+}
 extern "C"
 K getparquetlib(K x) {
-    K y = ktn(0, 5);
-    x = ktn(KS, 5);
+    K y = ktn(0, 6);
+    x = ktn(KS, 6);
 
     kS(x)[0] = ss((char *) "init");
     kK(y)[0] = dl((V *) init, 1);
@@ -77,5 +84,9 @@ K getparquetlib(K x) {
 
     kS(x)[4] = ss((char *) "getfilebycols");
     kK(y)[4] = dl((V *) getfilebycols, 2);
+
+    kS(x)[5] = ss((char *) "settabletofile");
+    kK(y)[5] = dl((V *) settabletofile, 2);
+
     return xD(x, y);
 }

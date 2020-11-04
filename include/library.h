@@ -19,3 +19,5 @@ extern "C"
 int kgetfile(K &ms,std::string s);
 extern"C"
 int kgetfilebycols(K &ms,std::vector<std::string>,std::string s);
+extern"C"
+int ksettabletofile(K tab,std::string ms);

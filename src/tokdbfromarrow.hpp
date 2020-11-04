@@ -51,10 +51,21 @@ int arrowtoDoublevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     }
     return 0;
 }
+int arrowtoBoolvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+{
+    int n=arrow->length();
+//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
+    auto boolean_array = std::static_pointer_cast<arrow::BooleanArray>(arrow->chunk(0));
+    ns=ktn(KB,n);
+    for(int i=0;i<n;i++) {
+        kG(ns)[i]=(bool)boolean_array->Value(i);
+    }
+    return 0;
+}
 int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
 {
   std::string thistype=  arrow->type()->ToString();
-  //std::cout << thistype << std::endl;
+  std::cout << arrow.get()->type()->ToString() << "wwww" << std::endl;
    if(thistype=="double") {
 
   arrowtoDoublevector(ns,arrow);
@@ -70,9 +81,16 @@ int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
 
        arrowtoint32vector(ns,arrow);
    }
+   else if(thistype=="bool")
+   {
+
+       arrowtoBoolvector(ns,arrow);
+   }
    else
    {
-       std::cout << " case is unknown" << std::endl;
+       ns=ktn(0,arrow->length());
+
+       std::cout << " case is unknown" << arrow->length()  << std::endl;
    }
 
   return 0;

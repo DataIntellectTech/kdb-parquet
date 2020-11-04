@@ -24,10 +24,12 @@
 #include <parquet/arrow/writer.h>
 #include <parquet/exception.h>
 #include "Kx/k.h"
+arrow::Status s;
+std::exception myexception;
 #include "tokdbfromarrow.hpp"
 #include "fromkdbtoarrow.hpp"
-std::exception myexception;
-arrow::Status s;
+
+
 int arrowtabletokdb( K &ns, std::shared_ptr<arrow::Table> &table);
 arrow::Status getschema(std::string file, std::shared_ptr<arrow::Schema> &table);
 // #0 Build dummy data to pass around
@@ -161,27 +163,6 @@ void print_schema(std::shared_ptr<arrow::Table>  table)
 
 }
 
-bool validate_file(std::string file)
-{
-  //std::exception e;
-    try {
-        std::shared_ptr<arrow::io::ReadableFile> infile;
-        auto p = (arrow::io::ReadableFile::Open(file, arrow::default_memory_pool()));
-        if(!p.ok()){throw myexception;}
-        infile = std::move(p).ValueOrDie();
-        std::unique_ptr<parquet::arrow::FileReader> reader;
-        parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader);
-        std::shared_ptr<arrow::Table> table;
-        if(NULL==reader.get()){throw myexception;}
-        auto s=reader->ReadTable(&table);
-        return true;
-    }
-    catch(...)
-        {
-            std::cout << "Error loading file. File not validated" << std::endl;
-            return false;
-        }
-}
 
 arrow::Status readfile(std::string file, std::vector<int> indicies,std::shared_ptr<arrow::Table> &table)
 {
@@ -202,10 +183,12 @@ arrow::Status readfile(std::string file, std::vector<int> indicies,std::shared_p
     return s;
 }
 
-arrow::Status readcolumnsfromfile(std::string file, std::vector<std::string>cols,std::shared_ptr<arrow::Table> &table)
-{
 
-    return s;
+int ksettabletofile(K tab,std::string file)
+{
+    std::shared_ptr<arrow::Table> table;
+    kdbtoarrow(tab,table);
+    return 0;
 }
 //Get a simple table and all fields.
 int kgetfile(K &ns,std::string file) {
@@ -234,15 +217,13 @@ int kgetfilebycols(K &ns,std::vector<std::string> cols,std::string file) {
         std::cout <<  schema->GetFieldIndex(*it) << std::endl;
         ivec.push_back( schema->GetFieldIndex(*it) );
     }
-    //std::cout << schema->
-
-
-    s=readfile(file,ivec,table);
+   s=readfile(file,ivec,table);
     arrowtabletokdb(ns,table);
 
     return 0;
 }
-//Overload. Get a table with subset of fields
+
+
 int kgetfilecols(K &ns,std::vector<std::string> cols,std::string file) {
     std::shared_ptr<arrow::Table> table;
     std::shared_ptr<arrow::Schema> schema;
@@ -254,10 +235,6 @@ int kgetfilecols(K &ns,std::vector<std::string> cols,std::string file) {
     return 0;
 }
 
-int kgetcolumns(K &ns,std::vector<std::string>cols, std::string file)
-{
-    return 0;
-}
 
 arrow::Status getschema(std::string file, std::shared_ptr<arrow::Schema> &schema)
 {   std::shared_ptr<arrow::io::ReadableFile> infile;
@@ -290,15 +267,15 @@ int kgetschema(K &ns, std::string file)
     }
 
     int n=schema->field_names().size();
-    K names=ktn(KS,n);
-    K types=ktn(KS,n);
+    K names=ktn(0,n);
+    K types=ktn(0,n);
     for (int i = 0; i <n; ++i) {
         //std::cout <<   l[i] << std::endl;
         //std::cout <<   table->ColumnNames()[i] << std::endl;
-        char* name=(char*)schema->field_names().at(i).data();
-        char* type=(char*)schema->fields().at(i)->type()->ToString().c_str() ;
-        kS(names)[i]=ss(name);
-        kS(types)[i]=ss(type);
+        std::string name=(char*)schema->field_names().at(i).data();
+        std::string tps = schema->fields().at(i)->type()->ToString();
+        kK(names)[i]=kpn((char*)name.c_str(),name.length());
+        kK(types)[i]=kpn((char*)tps.c_str(),tps.length());  ;
 
     }
    K cols=ktn(KS,2);kS(cols)[0]=ss("name");kS(cols)[1]=ss("type");
