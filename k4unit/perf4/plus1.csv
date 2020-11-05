@@ -1,0 +1,8 @@
+action,ms,bytes,lang,code,repeat,comment
+before,0,0,k,j:2+i:!1000000,1,
+before,0,0,k,g:2+f:1000000#2.3,1,
+run,75,1128,k,+/i,15,
+run,75,6291912,k,2+i,16,
+run,75,12583392,k,2+f,7,
+run,75,6291912,k,i+j,10,
+after,0,0,k,i:j:g:f:0,1,

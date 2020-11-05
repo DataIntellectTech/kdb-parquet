@@ -1,0 +1,9 @@
+action,ms,bytes,lang,code,repeat,comment
+before,0,0,q,value"\\q -p 5555",1,
+before,0,0,q,value"\\sleep 1",1,
+before,0,0,k,h:<`::5555,1,
+run,75,2112,k,h"k)!?100",625,
+run,261,960888,k,do[10000;(-h)"23"];h"23",1,async and chase
+run,75,1080,k,h"23",720,
+run,109,50331984,k,h"k)!2500000",1,
+after,0,0,k,@[h;"\\\\";::],1,close handle

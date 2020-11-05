@@ -1,0 +1,10 @@
+action,ms,bytes,lang,code,repeat,comment
+before,0,0,q,\l sp.q,1,
+before,0,0,q,y:value first sp,1,
+run,75,1464,q,s[`s1;`city],37912,
+run,75,2328,q,select city from s where s=`s1,51090,
+run,75,1704,q,s[`s1;`city]:`a,22753,
+run,75,2448,q,update city:`a from`s where s=`s1,39007,
+run,75,2752920,q,"sp,:y",68036,
+run,75,1368,q,`sp insert y,46900,
+after,0,0,k,s:p:sp:0,1,
