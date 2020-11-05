@@ -17,4 +17,4 @@ q)KUTR				inspects test results
 show any failed tests:
 q)show select from KUTR where not ok
 show passed tests:
-q)show select from KUTR where not ok
+q)show select from KUTR where ok
