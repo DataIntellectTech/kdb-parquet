@@ -187,16 +187,14 @@ arrow::Status readfile(std::string file, std::vector<int> indicies,std::shared_p
 int ksettabletofile(K tab,std::string file)
 {
     std::shared_ptr<arrow::Table> table;
-    kdbtoarrow(tab,table);
+    //kdbtoarrow(tab,table);
     return 0;
 }
 //Get a simple table and all fields.
 int kgetfile(K &ns,std::string file) {
     std::shared_ptr<arrow::Table> table;
-    std::cout << " hello "<< std::endl;
     std::shared_ptr<arrow::Schema> schema;
     s=getschema(file,schema);
-    schema->GetFieldIndex("flow1");
     std::vector<int> ivec(schema->num_fields());
     std::iota (std::begin(ivec), std::end(ivec), 0);
 

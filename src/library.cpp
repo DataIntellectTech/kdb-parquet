@@ -34,9 +34,13 @@ extern "C"
 K getfile(K x) {
     char *s = x->s;
     K ns = (K) 0;
+   try{
     std::string ms(s);
         kgetfile(ns, ms);
-
+  }catch(...)
+{
+ return krr( "error");
+}
     return ns;
 }
 extern "C"
@@ -65,10 +69,27 @@ K settabletofile(K file,K tab)
     int r=ksettabletofile(tab,ms);
     return ki(r);
 }
+
+extern"C"
+K versioninfo(K a)
+{
+ K y = ktn(0, 2);
+ K x = ktn(KS, 2);
+ 
+ kS(x)[0] = ss((char *) "builddatetime");
+ kK(y)[0] = kp(  __TIMESTAMP__  );
+
+ kS(x)[1] = ss((char *) "buildinfo");
+ kK(y)[1] = kp( __VERSION__ ); 
+
+
+return xD(x,y);
+}
+
 extern "C"
-K getparquetlib(K x) {
-    K y = ktn(0, 6);
-    x = ktn(KS, 6);
+K getparquetlib(K a) {
+    K y = ktn(0, 7);
+    K x = ktn(KS, 7);
 
     kS(x)[0] = ss((char *) "init");
     kK(y)[0] = dl((V *) init, 1);
@@ -87,6 +108,9 @@ K getparquetlib(K x) {
 
     kS(x)[5] = ss((char *) "settabletofile");
     kK(y)[5] = dl((V *) settabletofile, 2);
+
+    kS(x)[6] = ss((char *) "versioninfo");
+    kK(y)[6] = dl((V *) versioninfo, 1);
 
     return xD(x, y);
 }
