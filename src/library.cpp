@@ -32,8 +32,9 @@ K getfilebycols(K x,K cols) {
 }
 extern "C"
 K getfile(K x) {
-    char *s = x->s;
-    K ns = (K) 0;
+    if(-11!=x->t){return krr("argtype");};
+   char *s = x->s;
+   K ns = (K) 0;
    try{
     std::string ms(s);
         kgetfile(ns, ms);
