@@ -1,0 +1,9 @@
+action,ms,bytes,lang,code,repeat,minver,comment
+run,0,0,q,.pg.getfile[1],1,,Check function doesnt seg with a bad argument
+run,0,0,q,@[.pg.getfile;1;1b],1,,Check function can be error trapped when failing
+true,0,0,q,@[.pq.getfile;`$"tests/testdata/test2.parquet";0b],1,,
+fail,0,0,q,.pq.getfile[`$"thisfile/doesntexist"],1,,
+true,0,0,q,99h=type (l 2:(`getparquetlib;1))[],1,,
+true,0,0,q,2878=count .pq.getfile[`$"tests/testdata/test2.parquet"],1,,
+true,0,0,q, all 10=type each .pq.versioninfo[],1,,Check that version function exists
+true,0,0,q,,1,,Check that reading a file that exists but isnt a parquet file returns a trappable error
