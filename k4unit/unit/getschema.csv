@@ -1,0 +1,4 @@
+action,ms,bytes,lang,code,repeat,minver,comment
+true,0,0,q,(("double";"string";"bool";"string")~(flip table)[`type])&("one";"two";"three";"__index_level_0__")~exec name from table:.pq.getschema[`$"tests/testdata/simple_example.parquet"],1,,test getschema
+
+~
