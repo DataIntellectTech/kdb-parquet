@@ -6,7 +6,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 #set( CMAKE_VERBOSE_MAKEFILE on )
 set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
-link_directories("/home/james/CLionProjects/kdb-Apache/rawlibs/arrow-apache-arrow-2.0.0/cpp/build/debug/")
+link_directories("${CMAKE_SOURCE_DIR}/rawlibs/arrow-apache-arrow-2.0.0/cpp/build/debug/")
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
