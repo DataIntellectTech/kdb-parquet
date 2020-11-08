@@ -1,0 +1,8 @@
+action,ms,bytes,lang,code,repeat,minver,comment
+true,0,0,q,{[x].pq.getfile[x]~.pq.getfilebycols[x;`$exec name from .pq.getschema[x]] }[getdatafile "mydata.parquet"],1,,test getfilebycols and get file should return the same thing if the second argumnet is all cols.
+true,0,0,q,{[x]( 1_flip .pq.getfile[x])~flip .pq.getfilebycols[x;1_`$exec name from .pq.getschema[x]] }[getdatafile "mydata.parquet"],1,,Drop the first col from getfilebycols and compare answer
+fail,0,0,q,.pq.getfilebycols[getdatafile "mydata.parquet";3 4],1,,Check that argument type is checked and cant seg
+fail,0,0,q,.pq.getfilebycols[`mytestdata;`age`full_name],1,,Check that argument type is checked and cant seg
+fail,0,0,q,.pq.getfilebycols["wwww";`age`full_name],1,,Check that argument type is checked and cant seg
+fail,0,0,q,.pq.getfilebycols["wwww";`age`full_name],1,,Repeat test witha file that doesnt exist [ Morris ]
+fail,0,0,q,.pq.getfilebycols["wwww";`age`full_name],1,,Repeat test witha file that exists but isnt a parquet file [ Morris ]

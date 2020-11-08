@@ -1,7 +1,7 @@
 // Licensed to the Apache Software Foundation (ASF) under one
 // or more contributor license agreements. See the NOTICE file
 // distributed with this work for additional information
-// regarding copyright ownership. The ASF licenses this file
+// regarding copyright ownership. The ASF liceses this file
 // to you under the Apache License, Version 2.0 (the
 // "License"); you may not use this file except in compliance
 // with the License. You may obtain a copy of the License at
@@ -182,12 +182,23 @@ arrow::Status readfile(std::string file, std::vector<int> indicies,std::shared_p
     if(!s.ok()){throw e;}
     return s;
 }
-
+int writeparquetfile(std::string file,const arrow::Table& table) {
+    std::shared_ptr<arrow::io::FileOutputStream> outfile;
+    //auto p = (arrow::io::ReadableFile::Open(file, arrow::default_memory_pool()));
+            auto p=arrow::io::FileOutputStream::Open(file, arrow::default_memory_pool());
+            if(!p.ok()){throw myexception;}
+            outfile = std::move(p).ValueOrDie();
+            arrow::Status s=parquet::arrow::WriteTable(table, arrow::default_memory_pool(), outfile, 3);
+            if(!s.ok()){
+                throw myexception;}
+           return 0;
+}
 
 int ksettabletofile(K tab,std::string file)
 {
     std::shared_ptr<arrow::Table> table;
-    //kdbtoarrow(tab,table);
+    kdbtoarrow(tab,table);
+    writeparquetfile(file,*table);
     return 0;
 }
 //Get a simple table and all fields.
@@ -209,7 +220,6 @@ int kgetfilebycols(K &ns,std::vector<std::string> cols,std::string file) {
     s=getschema(file,schema);
     std::vector<int> ivec(schema->num_fields());
     //std::iota (std::begin(ivec), std::end(ivec), 0);
-    schema->GetFieldIndex("flow1");
     for(std::vector<std::string>::iterator it = cols.begin(); it != cols.end(); ++it) {
          std::cout << *it << std::endl;
         std::cout <<  schema->GetFieldIndex(*it) << std::endl;
@@ -217,18 +227,6 @@ int kgetfilebycols(K &ns,std::vector<std::string> cols,std::string file) {
     }
    s=readfile(file,ivec,table);
     arrowtabletokdb(ns,table);
-
-    return 0;
-}
-
-
-int kgetfilecols(K &ns,std::vector<std::string> cols,std::string file) {
-    std::shared_ptr<arrow::Table> table;
-    std::shared_ptr<arrow::Schema> schema;
-    s=getschema(file,schema);
-     schema->GetFieldIndex("flow1");
-    std::cout << schema->GetFieldIndex("flow1") << std::endl;
-        arrowtabletokdb(ns,table);
 
     return 0;
 }

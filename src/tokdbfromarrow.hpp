@@ -66,6 +66,7 @@ int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
 {
   std::string thistype=  arrow->type()->ToString();
   std::cout << arrow.get()->type()->ToString() << "wwww" << std::endl;
+    std::cout << arrow.get()->length() << " length wwww" << std::endl;
    if(thistype=="double") {
 
   arrowtoDoublevector(ns,arrow);

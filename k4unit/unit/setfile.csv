@@ -1,0 +1,8 @@
+action,ms,bytes,lang,code,repeat,minver,comment
+true,0,0,q,,1,,create a tab with one field and save to a file. Read back in and check its correct
+true,0,0,q,,1,,create a tab with all [ supported] data types and save. Read back in check its the same
+true,0,0,q,,1,,create a tab with a nested list [ wont be supported ] and check it gives a trapable error when attempting to save. ]
+true,0,0,q,,1,,try and save over an existing file. Check error is thrown and that the old existing file can still be read. [ You may need more than one line for thsi.]
+true,0,0,q,,1,,Save a table with nulls for each data type. Check when re read in that answers make sense
+true,0,0,q,,1,,check function gives error if called with incorrect parameter types.
+true,0,0,q,,1,,check when you try to write to a file or director you dont have permission an error is tripped

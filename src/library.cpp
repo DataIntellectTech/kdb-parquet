@@ -65,9 +65,17 @@ K init(K x) {
 
 extern"C"
 K settabletofile(K file,K tab)
-{   char* s=file->s;
+{   std::cout << "hello"<< std::endl;
+    int r=0;
+    char* s=file->s;
     std::string ms(s);
-    int r=ksettabletofile(tab,ms);
+    try {
+        r = ksettabletofile(tab, ms);
+    } catch(...) {
+        std::cout << "hello caught exception "<< std::endl;
+        krr("cantsave");
+        return K(0);
+    }
     return ki(r);
 }
 
