@@ -79,6 +79,20 @@ int kdbtoarrowTimevector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& arra
     array.push_back(time32array);
     return 0;
 }
+int kdbtoarrowDate32vector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& array)
+{
+
+    arrow::Date32Builder date32builder;
+
+    for(int i=0;i<ns->n;i++) {
+        int m=(int)kI(ns)[i];
+        date32builder.Append(m);
+    }
+    std::shared_ptr<arrow::Array> date32array;
+    date32builder.Finish(&date32array);
+    array.push_back(date32array);
+    return 0;
+}
 
 int addcolumntoarray(K column,std::vector<std::shared_ptr<arrow::Array>>& array){
      int ktype=column->t;
@@ -88,6 +102,7 @@ int addcolumntoarray(K column,std::vector<std::shared_ptr<arrow::Array>>& array)
         case(7):  return kdbtoarrowint64vector(column,array);
         case(9):  return kdbtoarrowDoublevector(column,array);
         case(10): return kdbtoarrowCharvector(column,array);
+        case(14): return kdbtoarrowDate32vector(column,array);
         case(19): return kdbtoarrowTimevector(column,array);
         default:  return kdbtoarrowint64vector(column,array);
 
@@ -105,6 +120,7 @@ std::shared_ptr<arrow::Field>createfield(std::string name,int ktype){
         case(7): return arrow::field(name,arrow::int64());
         case(9): return arrow::field(name,arrow::float64());
         case(10): return arrow::field(name,arrow::utf8());
+        case(14): return arrow::field(name,arrow::date32());
         case(19): return arrow::field(name,arrow::time32(arrow::TimeUnit::MILLI));
         default: return  arrow::field(name,arrow::int64());
     }
