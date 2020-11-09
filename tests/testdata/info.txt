@@ -1,2 +1,8 @@
 File Name                     Description
-
+simple_example                created in python, 3 columns type:int,string,bool
+simple_example_with_schema    python with defined schema, same file, alt method
+parquet1                      made in python, different col types - time,float,etcnull                          table full of null values
+pqfalse                       used to test files that do not exist
+test2		              parquet file with many string,int,float cols 
+mydata                        c,i,f datatypes in parquet file
+out-test2                     j,f,i,c datatypes in parquet file		
