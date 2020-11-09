@@ -2,17 +2,6 @@
 #include "Kx/k.h"
 #include <iostream>
 
-void hello() {
-    std::cout << "Hello, World!" << std::endl;
-}
-extern "C"
-K khello(K x) {
-    std::cout << "Hello, World!\n" <<  (x->s) <<std::endl;
-    char* s=x->s;
-    std::string ms=s;
-
-    return (K)0;
-}
 
 extern "C"
 K getfilebycols(K x,K cols) {
@@ -71,6 +60,11 @@ K init(K x) {
     return (K)0;
 }
 
+extern "C"
+K getproperties(K x) {
+    return (K)0;
+}
+
 extern"C"
 K settabletofile(K file,K tab)
 {
@@ -110,8 +104,8 @@ K getparquetlib(K a) {
     kS(x)[0] = ss((char *) "init");
     kK(y)[0] = dl((V *) init, 1);
 
-    kS(x)[1] = ss((char *) "khello");
-    kK(y)[1] = dl((V *) khello, 1);
+    kS(x)[1] = ss((char *) "getproperties");
+    kK(y)[1] = dl((V *) getproperties, 1);
 
     kS(x)[2] = ss((char *) "getschema");
     kK(y)[2] = dl((V *) getschema, 1);
