@@ -1,0 +1,1 @@
+the null.py file creates null.csv and null.parquet which are both tables with column names Null0, Null1,Null2 ... Null9 and null values.
