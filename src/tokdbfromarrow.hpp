@@ -4,10 +4,8 @@
 int arrowtoint32vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
 int n=arrow->length();
-ns=ktn(KI,n);
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
+  ns=ktn(KI,n);
     auto int32_array = std::static_pointer_cast<arrow::Int32Array>(arrow->chunk(0));
-    std::cout << "num chunks is " << arrow->num_chunks() << std::endl;
   ns=ktn(KI,n);
 for(int i=0;i<n;i++) {
  kI(ns)[i]= (int)int32_array->Value(i);
@@ -62,6 +60,29 @@ int arrowtoBoolvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     }
     return 0;
 }
+int arrowtoTimevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+{
+    int n=arrow->length();
+//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
+    auto time32_array = std::static_pointer_cast<arrow::Time32Array>(arrow->chunk(0));
+    ns=ktn(KT,n);
+    for(int i=0;i<n;i++) {
+        kI(ns)[i]=(int)time32_array->Value(i);
+    }
+    return 0;
+}
+int arrowtoDatevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+{
+    int n=arrow->length();
+//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
+    auto date32_array = std::static_pointer_cast<arrow::Date32Array>(arrow->chunk(0));
+    ns=ktn(KD,n);
+    for(int i=0;i<n;i++) {
+        kI(ns)[i]=(int)date32_array->Value(i);
+    }
+    return 0;
+}
+
 int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
 {
   std::string thistype=  arrow->type()->ToString();
@@ -86,6 +107,16 @@ int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
    {
 
        arrowtoBoolvector(ns,arrow);
+   }
+   else if(thistype=="time32[ms]")
+   {
+
+       arrowtoTimevector(ns,arrow);
+   }
+   else if(thistype=="date32[day]")
+   {
+
+       arrowtoDatevector(ns,arrow);
    }
    else
    {

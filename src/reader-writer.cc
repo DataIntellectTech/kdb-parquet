@@ -146,15 +146,13 @@ void read_single_column_chunk() {
 
 void print_schema(std::shared_ptr<arrow::Table>  table)
 {
-    std::cout << " Printing SChema " << std::endl;
+
     const std::vector<std::string> &l = table->schema()->field_names();
     int n=table->schema()->field_names().size();
-    std::cout << " Printing SChema 2 " << std::endl;
+
     std::cout <<     table->schema()->HasMetadata() << std::endl;
-    std::cout << " Printing SChema 3 " << std::endl;
+
     for (int i = 0; i <n ; ++i) {
-        //std::cout <<   l[i] << std::endl;
-        //std::cout <<   table->ColumnNames()[i] << std::endl;
         std::cout <<    table->schema()->field_names().at(i) << std::endl;
         std::cout <<    table->schema()->fields().at(i)->type()->ToString() << std::endl;
         std::cout <<    table->column(i)->length()<< std::endl;
@@ -175,13 +173,12 @@ arrow::Status readfile(std::string file, std::vector<int> indicies,std::shared_p
     std::unique_ptr<parquet::arrow::FileReader> reader;
     parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader);
     if(NULL==reader.get()){throw e;}
-
-   // s = reader->ReadTable(&table);
-    //s = reader->ReadTable(&table);
     s=reader->ReadTable(indicies,&table);
     if(!s.ok()){throw e;}
     return s;
 }
+
+
 int writeparquetfile(std::string file,const arrow::Table& table) {
     std::shared_ptr<arrow::io::FileOutputStream> outfile;
     //auto p = (arrow::io::ReadableFile::Open(file, arrow::default_memory_pool()));
@@ -231,7 +228,6 @@ int kgetfilebycols(K &ns,std::vector<std::string> cols,std::string file) {
     return 0;
 }
 
-
 arrow::Status getschema(std::string file, std::shared_ptr<arrow::Schema> &schema)
 {   std::shared_ptr<arrow::io::ReadableFile> infile;
     try {
@@ -241,7 +237,6 @@ arrow::Status getschema(std::string file, std::shared_ptr<arrow::Schema> &schema
         std::unique_ptr<parquet::arrow::FileReader> reader;
         parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader);
         if(NULL==reader.get()){throw myexception;}
-
         s = reader->GetSchema(&schema);
         if(!s.ok()){throw myexception;}
     } catch (...) {
@@ -280,7 +275,35 @@ int kgetschema(K &ns, std::string file)
     return 0;
 
 }
+int kgetinfo(K &ns, std::string file)
+{
+    std::shared_ptr<arrow::Schema> schema;
+    try {
+        s=getschema(file,schema);
 
+    } catch (...) {
+        std::cout << "Could not get table schema " << std::endl;
+        throw(  myexception);
+    }
+
+    int n=schema->field_names().size();
+    K names=ktn(0,n);
+    K types=ktn(0,n);
+    for (int i = 0; i <n; ++i) {
+        //std::cout <<   l[i] << std::endl;
+        //std::cout <<   table->ColumnNames()[i] << std::endl;
+        std::string name=(char*)schema->field_names().at(i).data();
+        std::string tps = schema->fields().at(i)->type()->ToString();
+        kK(names)[i]=kpn((char*)name.c_str(),name.length());
+        kK(types)[i]=kpn((char*)tps.c_str(),tps.length());  ;
+
+    }
+    K cols=ktn(KS,2);kS(cols)[0]=ss("name");kS(cols)[1]=ss("type");
+    ns=xT(xD(cols,knk(2,names,types)));
+
+    return 0;
+
+}
 
 int arrowtabletokdb( K &ns, std::shared_ptr<arrow::Table> &table)
 {
