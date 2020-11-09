@@ -1,6 +1,26 @@
 action,ms,bytes,lang,code,repeat,minver,comment
-true,0,0,q,,1,,create a tab with one field and save to a file. Read back in and check its correct
-true,0,0,q,,1,,create a tab with all [ supported] data types and save. Read back in check its the same
+
+comment,0,,q,creates tab with one field,,,
+run,0,0,q,tab1:flip enlist[`a]!enlist[1 2 3 4],1,,
+
+comment,0,,q,saves table to file,,,
+run,0,0,q,.pq.settabletofile[`here;tab1],1,,
+
+comment,0,,q,reads back in to check correct,,,
+run,0,0,q,tab2:.pq.getfile[`here],1,,
+
+true,0,0,q,tab1~tab2,1,,checks tables match
+run,0,0,q,hdel `:here,1,,
+
+comment,0,,q,creates tab with all supported data types,,,
+run,0,0,q,alltab:([] c:("h";"w"); f:(21.5;22.6); i:(25;26); b:(1b;0b)),1,,
+
+
+run,0,0,q,.pq.settabletofile[`here;alltab],1,,
+true,0,0,q,alltab~thistab:.pq.getfile[`here],1,,checks tables match
+run,0,0,q,hdel `:here,1,,
+run,0,0,q,tab2:([]a:(1 2 3;4 5 6);b:(7 8 9;10 11 12)),1,,
+
 true,0,0,q,,1,,create a tab with a nested list [ wont be supported ] and check it gives a trapable error when attempting to save. ]
 true,0,0,q,,1,,try and save over an existing file. Check error is thrown and that the old existing file can still be read. [ You may need more than one line for thsi.]
 true,0,0,q,,1,,Save a table with nulls for each data type. Check when re read in that answers make sense
