@@ -1,5 +1,4 @@
 action,ms,bytes,lang,code,repeat,minver,comment
-
 comment,0,,q,creates tab with one field,,,
 run,0,0,q,tab1:flip enlist[`a]!enlist[1 2 3 4],1,,
 
@@ -8,21 +7,39 @@ run,0,0,q,.pq.settabletofile[`here;tab1],1,,
 
 comment,0,,q,reads back in to check correct,,,
 run,0,0,q,tab2:.pq.getfile[`here],1,,
-
 true,0,0,q,tab1~tab2,1,,checks tables match
 run,0,0,q,hdel `:here,1,,
 
 comment,0,,q,creates tab with all supported data types,,,
 run,0,0,q,alltab:([] c:("h";"w"); f:(21.5;22.6); i:(25;26); b:(1b;0b)),1,,
-
-
 run,0,0,q,.pq.settabletofile[`here;alltab],1,,
 true,0,0,q,alltab~thistab:.pq.getfile[`here],1,,checks tables match
 run,0,0,q,hdel `:here,1,,
+
+comment,0,,q,creates tab with a nested list,,,
 run,0,0,q,tab2:([]a:(1 2 3;4 5 6);b:(7 8 9;10 11 12)),1,,
 
-true,0,0,q,,1,,create a tab with a nested list [ wont be supported ] and check it gives a trapable error when attempting to save. ]
-true,0,0,q,,1,,try and save over an existing file. Check error is thrown and that the old existing file can still be read. [ You may need more than one line for thsi.]
-true,0,0,q,,1,,Save a table with nulls for each data type. Check when re read in that answers make sense
-true,0,0,q,,1,,check function gives error if called with incorrect parameter types.
-true,0,0,q,,1,,check when you try to write to a file or director you dont have permission an error is tripped
+comment,0,,q,checks tab gives a trappable error when saving,,,
+true,0,0,q,.[.pq.settabletofile;(`here;alltab);1b],1,,
+
+comment,0,,q,tries to save over an existing file, checks error is thrown,,,
+true,0,0,q,.[.pq.settabletofile;(`here;([] a:1 2 3 b:4 5 6));1b],1,,
+
+comment,0,,q,checks existing file can be read,,,
+true,0,0,q,21.5 22.6 ~ exec f from .pq.getfile[`here],1,,
+
+comment,0,,q,save a table with nulls for each data type and reading makes sense,,,
+run,0,0,q,)nulltab:([]c:(" ";" ";" ");i:(0Ni;0Ni;0Ni);j:(0Nj;0Nj;0Nj);f:(0n 0n 0n)),1,,
+run,0,0,q,.pq.settabletofile[`there;nulltab],1,,
+true,0,0,q,nulltab~tab2:.pq.getfile[`there],1,,
+,1,,
+
+comment,0,,q,check can't write to a file that you do not have permission for,,,
+fail,0,0,q,.pq.settabletofile[`$"../../bchen";nulltab],1,,
+
+comment,0,,q,check function gives error if called with incorrect parameter type,,,
+run,0,0,q,arg1:"directory",1,,
+run,0,0,q,arg2:nulltab,1,,
+fail,0,0,q,.pq.settabletofile[arg1;arg2],1,,
+
+
