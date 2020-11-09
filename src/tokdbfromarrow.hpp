@@ -4,10 +4,8 @@
 int arrowtoint32vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
 int n=arrow->length();
-ns=ktn(KI,n);
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
+  ns=ktn(KI,n);
     auto int32_array = std::static_pointer_cast<arrow::Int32Array>(arrow->chunk(0));
-    std::cout << "num chunks is " << arrow->num_chunks() << std::endl;
   ns=ktn(KI,n);
 for(int i=0;i<n;i++) {
  kI(ns)[i]= (int)int32_array->Value(i);

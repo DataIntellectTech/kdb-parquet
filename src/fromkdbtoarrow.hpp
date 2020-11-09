@@ -55,7 +55,6 @@ int kdbtoarrowCharvector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& arra
 {
     arrow::StringBuilder stringbuilder;
     for(int i=0;i<ns->n;i++) {
-        std::cout << " length wwww  " <<std::endl;
         char m=(char)kG(ns)[i];
         //std::cout << " length wwww  " << mystr <<std::endl;
         stringbuilder.Append(std::string(1,m));

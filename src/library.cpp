@@ -30,6 +30,12 @@ K getfilebycols(K x,K cols) {
 
   return ns;
 }
+
+K getfilebyindicies(K x,K indicies) {
+   return krr("nyi");
+
+    return (K)0;
+}
 extern "C"
 K getfile(K x) {
     if(-11!=x->t){return krr("argtype");};
@@ -58,6 +64,8 @@ K getschema(K x) {
     }
     return ns;
 }
+
+
 extern "C"
 K init(K x) {
     return (K)0;
@@ -65,14 +73,13 @@ K init(K x) {
 
 extern"C"
 K settabletofile(K file,K tab)
-{   std::cout << "hello"<< std::endl;
+{
     int r=0;
     char* s=file->s;
     std::string ms(s);
     try {
         r = ksettabletofile(tab, ms);
     } catch(...) {
-        std::cout << "hello caught exception "<< std::endl;
         krr("cantsave");
         return K(0);
     }
@@ -97,8 +104,8 @@ return xD(x,y);
 
 extern "C"
 K getparquetlib(K a) {
-    K y = ktn(0, 7);
-    K x = ktn(KS, 7);
+    K y = ktn(0, 8);
+    K x = ktn(KS, 8);
 
     kS(x)[0] = ss((char *) "init");
     kK(y)[0] = dl((V *) init, 1);
@@ -120,6 +127,9 @@ K getparquetlib(K a) {
 
     kS(x)[6] = ss((char *) "versioninfo");
     kK(y)[6] = dl((V *) versioninfo, 1);
+
+    kS(x)[7] = ss((char *) "getfilebyindicies");
+    kK(y)[7] = dl((V *) getfilebyindicies, 2);
 
     return xD(x, y);
 }
