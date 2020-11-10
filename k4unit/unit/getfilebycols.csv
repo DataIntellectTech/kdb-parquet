@@ -4,5 +4,5 @@ true,0,0,q,{[x]( 1_flip .pq.getfile[x])~flip .pq.getfilebycols[x;1_`$exec name f
 fail,0,0,q,.pq.getfilebycols[getdatafile "mydata.parquet";3 4],1,,Check that argument type is checked and cant seg
 fail,0,0,q,.pq.getfilebycols[`mytestdata;`age`full_name],1,,Check that argument type is checked and cant seg
 fail,0,0,q,.pq.getfilebycols["wwww";`age`full_name],1,,Check that argument type is checked and cant seg
-fail,0,0,q,.pq.getfilebycols["wwww";`age`full_name],1,,Repeat test witha file that doesnt exist [ Morris ]
-fail,0,0,q,.pq.getfilebycols["wwww";`age`full_name],1,,Repeat test witha file that exists but isnt a parquet file [ Morris ]
+fail,0,0,q,.pq.getfilebycols[getdatafile doesntexist.parquet;`age`full_name],1,,Repeat test witha file that doesnt exist [ Morris ]
+fail,0,0,q,.pq.getfilebycols[getdatafile "info.txt";`age`fullname],1,,Repeat test witha file that exists but isnt a parquet file [ Morris ]
