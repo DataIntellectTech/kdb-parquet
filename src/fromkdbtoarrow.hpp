@@ -64,6 +64,19 @@ int kdbtoarrowCharvector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& arra
     array.push_back(stringarray);
     return 0;
 }
+int kdbtoarrowSymbolvector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& array)
+{
+    arrow::StringBuilder stringbuilder;
+    for(int i=0;i<ns->n;i++) {
+        std::string m((char*)(kS(ns)[i]));
+        //std::cout << " length wwww  " << mystr <<std::endl;
+        stringbuilder.Append(m);
+    }
+    std::shared_ptr<arrow::Array> stringarray;
+    stringbuilder.Finish(&stringarray);
+    array.push_back(stringarray);
+    return 0;
+}
 int kdbtoarrowTimevector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& array)
 {
 
@@ -108,6 +121,7 @@ int addcolumntoarray(K column,std::vector<std::shared_ptr<arrow::Array>>& array)
         case(7):  return kdbtoarrowint64vector(column,array);
         case(9):  return kdbtoarrowDoublevector(column,array);
         case(10): return kdbtoarrowCharvector(column,array);
+        case(11): return kdbtoarrowSymbolvector(column,array);
         case(14): return kdbtoarrowDate32vector(column,array);
         case(19): return kdbtoarrowTimevector(column,array);
         default:  return kdbtoarrowint64vector(column,array);
@@ -127,6 +141,7 @@ std::shared_ptr<arrow::Field>createfield(std::string name,int ktype){
         case(7): return arrow::field(name,arrow::int64());
         case(9): return arrow::field(name,arrow::float64());
         case(10): return arrow::field(name,arrow::utf8());
+        case(11): return arrow::field(name,arrow::utf8());
         case(14): return arrow::field(name,arrow::date32());
         case(19): return arrow::field(name,arrow::time32(arrow::TimeUnit::MILLI));
         default: return  arrow::field(name,arrow::int64());
