@@ -218,8 +218,6 @@ int kgetfilebycols(K &ns,std::vector<std::string> cols,std::string file) {
     std::vector<int> ivec(0);
     //std::iota (std::begin(ivec), std::end(ivec), 0);
     for(std::vector<std::string>::iterator it = cols.begin(); it != cols.end(); ++it) {
-         std::cout << *it << " qqqq" << std::endl;
-        std::cout <<  schema->GetFieldIndex(*it) << " cccc"<<  std::endl;
         ivec.push_back( schema->GetFieldIndex(*it) );
     }
    s=readfile(file,ivec,table);

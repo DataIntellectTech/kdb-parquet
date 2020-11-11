@@ -93,10 +93,16 @@ int kdbtoarrowDate32vector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& ar
     array.push_back(date32array);
     return 0;
 }
-
+int kdbtoarrowMixedlist(K &ns, std::vector<std::shared_ptr<arrow::Array>>& array)
+{
+    //Mixed lists and or nested lists not supported for now.
+    throw( myexception);
+    return 0;
+}
 int addcolumntoarray(K column,std::vector<std::shared_ptr<arrow::Array>>& array){
      int ktype=column->t;
     switch(ktype){
+        case(0):  return kdbtoarrowMixedlist(column,array);
         case(1):  return kdbtoarrowBooleanvector(column,array);
         case(6):  return kdbtoarrowint32vector(column,array);
         case(7):  return kdbtoarrowint64vector(column,array);
@@ -114,6 +120,7 @@ int addcolumntoarray(K column,std::vector<std::shared_ptr<arrow::Array>>& array)
 std::shared_ptr<arrow::Field>createfield(std::string name,int ktype){
 
     switch(ktype){
+        case(0): return arrow::field(name,arrow::null());
         case(1): return arrow::field(name,arrow::boolean());
         case(3): return arrow::field(name,arrow::int64());
         case(6): return arrow::field(name,arrow::int32());

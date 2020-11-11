@@ -12,7 +12,6 @@ K getfilebycols(K x,K cols) {
     std::vector<std::string> colnames;
     for(int i=0;i<cols->n;i++) {
         std::string col(kS(cols)[i]);
-        std::cout << col<< std::endl;
         colnames.push_back(col);
     }
     kgetfilebycols(ns,colnames, ms);
