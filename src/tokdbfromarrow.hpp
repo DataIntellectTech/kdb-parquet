@@ -82,6 +82,28 @@ int arrowtoDatevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     }
     return 0;
 }
+int arrowtofloat32vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+{
+    int n=arrow->length();
+//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
+    auto float32_array = std::static_pointer_cast<arrow::FloatArray>(arrow->chunk(0));
+    ns=ktn(KF,n);
+    for(int i=0;i<n;i++) {
+        kF(ns)[i]=(double)float32_array->Value(i);
+    }
+    return 0;
+}
+int arrowtofloat64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+{
+    int n=arrow->length();
+//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
+    auto date32_array = std::static_pointer_cast<arrow::Date32Array>(arrow->chunk(0));
+    ns=ktn(KD,n);
+    for(int i=0;i<n;i++) {
+        kI(ns)[i]=(int)date32_array->Value(i);
+    }
+    return 0;
+}
 
 int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
 {
@@ -89,8 +111,10 @@ int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
   std::cout << arrow.get()->type()->ToString() << "wwww" << std::endl;
     std::cout << arrow.get()->length() << " length wwww" << std::endl;
    if(thistype=="double") {
+       arrowtoDoublevector(ns,arrow);
+   }else if(thistype=="float")
+   {  arrowtofloat32vector(ns,arrow);
 
-  arrowtoDoublevector(ns,arrow);
    } else if(thistype=="int64")
    {  arrowtoint64vector(ns,arrow);
 
