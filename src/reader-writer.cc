@@ -215,11 +215,11 @@ int kgetfilebycols(K &ns,std::vector<std::string> cols,std::string file) {
     std::shared_ptr<arrow::Table> table;
     std::shared_ptr<arrow::Schema> schema;
     s=getschema(file,schema);
-    std::vector<int> ivec(schema->num_fields());
+    std::vector<int> ivec(0);
     //std::iota (std::begin(ivec), std::end(ivec), 0);
     for(std::vector<std::string>::iterator it = cols.begin(); it != cols.end(); ++it) {
-         std::cout << *it << std::endl;
-        std::cout <<  schema->GetFieldIndex(*it) << std::endl;
+         std::cout << *it << " qqqq" << std::endl;
+        std::cout <<  schema->GetFieldIndex(*it) << " cccc"<<  std::endl;
         ivec.push_back( schema->GetFieldIndex(*it) );
     }
    s=readfile(file,ivec,table);
@@ -307,7 +307,6 @@ int kgetinfo(K &ns, std::string file)
 
 int arrowtabletokdb( K &ns, std::shared_ptr<arrow::Table> &table)
 {
-    std::cout <<  " Converting arrow table to kdb+ values " << std::endl;
     int n=table->num_columns();                  //num_columns
     int r=table->num_rows();                   //num_rows
     K names=ktn(KS,n);
