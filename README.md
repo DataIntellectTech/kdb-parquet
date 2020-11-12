@@ -4,9 +4,9 @@ The tests/testdata directory contains 3 csv files with randomly generated data. 
 [Time:datetime,float32:32 bit float, float64: 64 bit float, string:string,bool:boolean ]
 
 
-|Solace LIb API Function   | Description  | Arguments  | Example Usage  |tests   |
-|---|---|---|---|---|
-|   |   |   |   |   |
+|Pyarrow API function   | Description  | Arguments  | Example Usage  |
+|---|---|---|---|
+|   |   |   |   |
 
 173 Solace Lib API Function | Description | Arguments | Example usage               
 174 ------------------------|-------------|-----------|--------------               
