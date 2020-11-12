@@ -8,12 +8,11 @@ The tests/testdata directory contains 3 csv files with randomly generated data. 
 |---|---|---|---|
 | init  | Initialise Code  |   |   |
 | getproperties  |   |   |   |
-| getschema  | shows columns and their types  | `:filepath]  |   |
+| getschema  | shows columns and their types  | [`:filepath]  |`.pq.getschema[`$"tests/testdata/simple_example.parquet"]   |
+| .pq.getfile  | retrieves table  | [`:filepath]  |`.pq.getfile[`$"tests/testdata/simple_example.parquet"]   |
+| .pq.getfilebycols  | retrieves columns from tables  | [`:filepath;col_list]  |```.pq.getfilebycols[getdatafile "simple_example.parquet";`one`two]``` |
+| .pq.settabletofile | saves table to a file  | [`:filepath;table]  |  ```alltab:([] c:("h";"w"); f:(21.5;22.6); i:(25;26); b:(1b;0b)) .pq.settabletofile[`here;alltab]``` |
+| .pq.versioninfo  |  shows build version and date  |  [] | .pq.versioninfo[]  |
+| .getfilebyindices  |  |   |   |
 
-173 Solace Lib API Function | Description | Arguments | Example usage               
-174 ------------------------|-------------|-----------|--------------               
-175 init | Initialises a connection to the broker | Dictionary `o` of inputs (see Table 2) | ```.solace.init[d:(`user`password`host`port`loglevel)!(`admin;`admin;`$"192.168.1.48";55555;2)]```
-176 getstats | Returns a dictionary of number of messages received, sent, batched and processed | Niladic | `.solace.getstats[]`
-177 subscribe | Subscribes to a topic | Topic name | `.solace.subscribe["Default"]` 
-178 printargs | Prints all library settings and current values | Niladic | `.solace.printargs[]`
-179 disconnect | Disconnects from broker | Niladic | `.solace.disconnect[]`  
+
