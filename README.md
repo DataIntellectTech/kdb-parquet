@@ -3,6 +3,11 @@
 The tests/testdata directory contains 3 csv files with randomly generated data. Each field is of a different type and has the schema:
 [Time:datetime,float32:32 bit float, float64: 64 bit float, string:string,bool:boolean ]
 
+
+|   |   |   |   |   |
+|---|---|---|---|---|
+|   |   |   |   |   |
+
 173 Solace Lib API Function | Description | Arguments | Example usage               
 174 ------------------------|-------------|-----------|--------------               
 175 init | Initialises a connection to the broker | Dictionary `o` of inputs (see Table 2) | ```.solace.init[d:(`user`password`host`port`loglevel)!(`admin;`admin;`$"192.168.1.48";55555;2)]```
