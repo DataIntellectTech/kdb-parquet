@@ -6,6 +6,8 @@
 extern "C"
 K getfilebycols(K x,K cols) {
     char *s = x->s;
+    if(-11!=x->t){return krr("argtype");};
+    if(11!=cols->t){return krr("argtype");};
     K ns = (K) 0;
     std::string ms(s);
     std::string col;
@@ -14,8 +16,12 @@ K getfilebycols(K x,K cols) {
         std::string col(kS(cols)[i]);
         colnames.push_back(col);
     }
+    try{
     kgetfilebycols(ns,colnames, ms);
-
+    } catch(...)
+    {
+	    return krr("error");
+    }
   return ns;
 }
 
