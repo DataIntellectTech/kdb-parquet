@@ -2,12 +2,12 @@
 
 Kdb-Apache is an adaptor that is able to convert Kdb Tables into the Apache Parquet table format. The API provides a translation of all Kdb Data types to Apache Parquet and vice versa.
 
-Build Instructions
+## Build Instructions
 
 In the command line run cmake . followed by make to create the new build.
 the build version can be checked by entering a q session using q q/test.q and then typing .pq.versioninfo[] to check the build version and date.
 
-Examples
+## Examples
 after entering a q session using  q q/test.q
 .pq
 
@@ -85,7 +85,7 @@ The tests/testdata directory contains 3 csv files with randomly generated data. 
 | .getfilebyindices  |  |   |   |
 
 
-Running Unit Tests
+## Running Unit Tests
 
 Unit Tests are automated using the K4unit testing library from KX
 https://github.com/simongarland/k4unit
