@@ -6,7 +6,9 @@ The tests/testdata directory contains 3 csv files with randomly generated data. 
 
 |Pyarrow API function   | Description  | Arguments  | Example Usage  |
 |---|---|---|---|
-|   |   |   |   |
+| init  | Initialise Code  |   |   |
+| getproperties  |   |   |   |
+| getschema  | shows columns and their types  | `:filepath]  |   |
 
 173 Solace Lib API Function | Description | Arguments | Example usage               
 174 ------------------------|-------------|-----------|--------------               
