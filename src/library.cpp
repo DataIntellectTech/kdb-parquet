@@ -1,7 +1,32 @@
 #include "library.h"
 #include "Kx/k.h"
 #include <iostream>
+int savechunksize=10000;
+extern "C"
+K setvar(K x,K y)
+{
+if(-11!=x->t){return krr("argtype");};
+std::string ms((char*)x->s);
+//Set chunck size when saving.
+  if(ms=="savechunksize")
+  {
+      if(-7!=y->t) {return krr("argtype");};
+         savechunksize = y->j;
 
+  }
+return (K)0;
+}
+
+
+extern "C"
+K getvar(K x)
+{
+        if(-11!=x->t){return krr("argtype");};
+        std::string ms((char*)x->s);
+//Get chunck size when saving.
+        if(ms=="savechunksize"){return   kj(savechunksize);}
+        return (K)0;
+}
 
 extern "C"
 K getfilebycols(K x,K cols) {
@@ -103,8 +128,8 @@ return xD(x,y);
 
 extern "C"
 K getparquetlib(K a) {
-    K y = ktn(0, 8);
-    K x = ktn(KS, 8);
+    K y = ktn(0, 10);
+    K x = ktn(KS, 10);
 
     kS(x)[0] = ss((char *) "init");
     kK(y)[0] = dl((V *) init, 1);
@@ -129,6 +154,12 @@ K getparquetlib(K a) {
 
     kS(x)[7] = ss((char *) "getfilebyindicies");
     kK(y)[7] = dl((V *) getfilebyindicies, 2);
+
+    kS(x)[8] = ss((char *) "setvar");
+    kK(y)[8] = dl((V *) setvar, 2);
+
+    kS(x)[9] = ss((char *) "getvar");
+    kK(y)[9] = dl((V *) getvar, 1);
 
     return xD(x, y);
 }

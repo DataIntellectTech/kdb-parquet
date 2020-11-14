@@ -185,7 +185,7 @@ int writeparquetfile(std::string file,const arrow::Table& table) {
             auto p=arrow::io::FileOutputStream::Open(file, arrow::default_memory_pool());
             if(!p.ok()){throw myexception;}
             outfile = std::move(p).ValueOrDie();
-            arrow::Status s=parquet::arrow::WriteTable(table, arrow::default_memory_pool(), outfile, 3);
+            arrow::Status s=parquet::arrow::WriteTable(table, arrow::default_memory_pool(), outfile, savechunksize);
             if(!s.ok()){
                 throw myexception;}
            return 0;

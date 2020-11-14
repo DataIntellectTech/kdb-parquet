@@ -144,8 +144,10 @@ std::shared_ptr<arrow::Field>createfield(std::string name,int ktype){
         case(11): return arrow::field(name,arrow::utf8());
         case(14): return arrow::field(name,arrow::date32());
         case(19): return arrow::field(name,arrow::time32(arrow::TimeUnit::MILLI));
-        default: return  arrow::field(name,arrow::int64());
+        default: ;
     }
+   throw myexception;
+
 
 }
 
