@@ -74,18 +74,20 @@ The tests/testdata directory contains 3 csv files with randomly generated data. 
 
 
 
-| Table Kdb API function  | Description  | Arguments  | Usage  | Example Usage  |
-|---|---|---|---|---|
-| init  | Initialise Code  |   |   |   |
-| getproperties  |   |   |   |   |
-| getschema  | shows columns and their types  | filepath  | .pq.getschema[<filepath>]  | `.pq.getschema[`$"tests/testdata/simple_example.parquet"]  |
-| .pq.getfile  | retrieves table  | <filepath>  | .pq.getfile[<filepath>]   | .pq.getfile[`$"tests/testdata/simple_example.parquet"]  |
-| .pq.getfilebycols  | retrieves columns from tables  | <filepath><col_list>  | .pq.getfilebycols[<filepath>;<col_list>]  | ```.pq.getfilebycols[getdatafile "simple_example.parquet";`one`two]```  |
-| .pq.settabletofile  | saves table to a file  | <filepath><table>  | .pq.settabletofile[<filepath>;<table>]  | ```alltab:([] c:("h";"w"); f:(21.5;22.6); i:(25;26); b:(1b;0b)) .pq.settabletofile[`here;alltab]```  |
-| .pq.versioninfo  | shows build version and date  | <>  |   | .pq.versioninfo[]  |
-| .getfilebyindices  |   |   |   |   |
 
-## Running Unit Tests
+
+
+| Table Kdb Api Function | Description                   | Arguments            | Usage                                    | Example Usage                                                            |
+|------------------------|-------------------------------|----------------------|------------------------------------------|--------------------------------------------------------------------------|
+| Init                   | Initialize                    |                      |                                          |                                                                          |
+| .pq.getproperties      |                               |                      |                                          |                                                                          |
+| .pq.getschema          | shows columns and their types | <filepath>           | .pq.getschema[<filepath>]                | .pq.getschema[`$"tests/testdata/simple_example.parquet"]                 |
+| .pq.getfile            | retrieves table               | <filepath>           | .pq.getfile[<filepath>]                  | .pq.getfile[`$"tests/testdata/simple_example.parquet"]                   |
+| .pq.getfilebycols      | retrives columns from tables  | <filepath><col_list> | .pq.getfilebycols[<filepath>;<col_list>] | .pq.getfilebycols[getdatafile "simple_example.parquet";`one`two]         |
+| .pq.settabletofile     | saves to a file               | <filepath><table>    | .pq.settabletofile[<filepath>;<table>]   | ```alltab:([]c:("h";"w");b:(1b;0b))  .pq.settabletofile[`here;alltab]``` |
+| .pq.versioninfo        | shows build version and date  | no arguments         |                                          | .pq.versioninfo[]                                                        |
+| .pq.getfilebyindices   |                               |                      |                                          |                                                                          |
+|                        |                               |                      |                                          |                                                                          |
 
 Unit Tests are automated using the K4unit testing library from KX
 https://github.com/simongarland/k4unit
