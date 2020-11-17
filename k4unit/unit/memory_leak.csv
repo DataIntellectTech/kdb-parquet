@@ -1,0 +1,5 @@
+run,0,0,q,used:.Q.w[]`used,1,,checks memory consumed before getfile
+run,0,0,q,do[1000;.pq.getfile[`$"tests/testdata/parquet1.parquet"]],1,,
+true,0,0,q,used~.Q.w[]`used,checks memory consumed before getfile
+
+
