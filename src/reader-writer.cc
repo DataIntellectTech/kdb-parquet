@@ -24,7 +24,7 @@
 #include <parquet/arrow/reader.h>
 #include <parquet/arrow/writer.h>
 #include <parquet/exception.h>
-#include "parquet/stream_reader.h"
+//#include "parquet/stream_reader.h"
 
 #include "Kx/k.h"
 
@@ -32,7 +32,7 @@ arrow::Status s;
 std::exception myexception;
 #include "tokdbfromarrow.hpp"
 #include "fromkdbtoarrow.hpp"
-#include "tokdbfromparquet.hpp"
+//#include "tokdbfromparquet.hpp"
 
 int arrowtabletokdb( K &ns, std::shared_ptr<arrow::Table> &table);
 arrow::Status getschema(std::string file, std::shared_ptr<arrow::Schema> &table);
@@ -328,6 +328,12 @@ int arrowtabletokdb( K &ns, std::shared_ptr<arrow::Table> &table)
     ns=xT(xD(names,values));
     return 0;
 }
+
+int kstreamread(std::string file)
+{
+	return 0;
+}
+/*
 void printinput( parquet::StreamReader &os)
 {
     int64_t a,b,c;
@@ -341,7 +347,7 @@ void printinput( parquet::StreamReader &os)
 
 
 }
-int kstreamread(std::string file)
+ int kstreamread(std::string file)
 {
     std::cout <<    "Hello starting stream read  " << file << std::endl;
     std::shared_ptr<arrow::io::ReadableFile> infile;
@@ -368,3 +374,4 @@ int kstreamread(std::string file)
     }
   return 0;
 }
+*/
