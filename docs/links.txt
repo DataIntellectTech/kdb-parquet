@@ -6,3 +6,5 @@ export LD_LIBRARY_PATH=~/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/s
 
 Python to create sensible test parquet files
 https://mungingdata.com/python/writing-parquet-pandas-pyspark-koalas/
+
+g++ reader-writer.cc -I /home/james/parquet/arrow-apache-arrow-2.0.0/cpp/src/ -fPIC -L/home/james/parquet/arrow-apache-arrow-2.0.0/cpp/build-debug/release -larrow -lparquet -o myout

@@ -96,9 +96,9 @@ int kdbtoarrowDate32vector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& ar
 {
 
     arrow::Date32Builder date32builder;
-
+    //Parquet dates are from 1970.01.01. this need to add on 10957 days.
     for(int i=0;i<ns->n;i++) {
-        int m=(int)kI(ns)[i];
+        int m=((int)kI(ns)[i])+10957;
         date32builder.Append(m);
     }
     std::shared_ptr<arrow::Array> date32array;
