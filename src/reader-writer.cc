@@ -20,15 +20,19 @@
 #include <iostream>
 #include <arrow/api.h>
 #include <arrow/io/api.h>
+#include "arrow/io/file.h"
 #include <parquet/arrow/reader.h>
 #include <parquet/arrow/writer.h>
 #include <parquet/exception.h>
+#include "parquet/stream_reader.h"
+
 #include "Kx/k.h"
+
 arrow::Status s;
 std::exception myexception;
 #include "tokdbfromarrow.hpp"
 #include "fromkdbtoarrow.hpp"
-
+#include "tokdbfromparquet.hpp"
 
 int arrowtabletokdb( K &ns, std::shared_ptr<arrow::Table> &table);
 arrow::Status getschema(std::string file, std::shared_ptr<arrow::Schema> &table);
@@ -188,7 +192,9 @@ int writeparquetfile(std::string file,const arrow::Table& table) {
             arrow::Status s=parquet::arrow::WriteTable(table, arrow::default_memory_pool(), outfile, savechunksize);
             if(!s.ok()){
                 throw myexception;}
+
            return 0;
+
 }
 
 int ksettabletofile(K tab,std::string file)
@@ -322,4 +328,43 @@ int arrowtabletokdb( K &ns, std::shared_ptr<arrow::Table> &table)
     ns=xT(xD(names,values));
     return 0;
 }
+void printinput( parquet::StreamReader &os)
+{
+    int64_t a,b,c;
 
+
+    os >> a;
+    os >> b;
+    os >> c;
+    os >> parquet::EndRow;
+    std::cout <<   a << " "<<  b << " " << c << " " <<std::endl;
+
+
+}
+int kstreamread(std::string file)
+{
+    std::cout <<    "Hello starting stream read  " << file << std::endl;
+    std::shared_ptr<arrow::io::ReadableFile> infile;
+        auto p = (arrow::io::ReadableFile::Open("mystream", arrow::default_memory_pool()));
+        if (!p.ok()) { throw myexception; }
+        infile = std::move(p).ValueOrDie();
+    parquet::StreamReader os{parquet::ParquetFileReader::Open(infile)};
+    std::shared_ptr<arrow::Schema> thisschema;
+    s=getschema("mystream",thisschema);
+    thisschema.get()->fields().at(0)->type()->ToString();
+    int nc=os.num_columns();
+    int nr=os.num_rows();
+    K field;
+    K row=ktn(0,nc);
+    std::cout <<   os.num_rows() << " " << os.num_columns() <<std::endl;
+
+    for (int i = 0; !os.eof(); ++i) {
+       for(int j=0;j<nc;j++)
+       {
+           tokdbfromparquet(os,thisschema.get()->fields().at(j)->type()->ToString(),field);
+
+       }
+        os >> parquet::EndRow;
+    }
+  return 0;
+}

@@ -6,8 +6,8 @@ o:.Q.def[`init`file`libfile!(1b;`$"tests/testdata/out-test2.parquet";l);.Q.opt[.
 
 //if[o[`init];show n:.pq.getfilebycols[o[`file];exec name from .pq.getschema[o[`file]]]]
 tab:(+)`j`f`s`c!(1 2 3;3 4 5.;`q`w`e;("qwe";"wsx";"345"))
-tab2:update j:i,t:t+i,d:d+i from 10000#(+)`j`f`i`c`t`d!(1 2 3;1 3 4.1;1 2 3i;"123";12:00:00.000;.z.D)
-@[system;"rm myfile.test";1b]
+tab2:update j:i,t:t+i,d:d+i from 10#(+)`j`f`i`c`t`d`C!(1 2 3;1 3 4.1;1 2 3i;"abc";12:00:00.000;.z.D;`$("wsx";"qa";"eeeeee"))
+@[system;"rm ", string o[`file];1b]
 .pq.settabletofile[o[`file];tab2]
 //show .pq.getfile[o[`file]]
 \

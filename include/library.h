@@ -10,9 +10,12 @@
 #undef U      // Collision between template types in c++ and this macro u.
 #undef R      // Collision between template types in c++ and this macro u.
 
-void hello();
+//List of all PQ setting variables.
+extern int savechunksize;
 
 
+extern "C"
+int kstreamread(std::string);
 extern "C"
 int kgetschema(K &ms,std::string s);
 extern "C"

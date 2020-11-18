@@ -118,7 +118,8 @@ int arrowtoDatevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     auto date32_array = std::static_pointer_cast<arrow::Date32Array>(arrow->chunk(0));
     ns=ktn(KD,n);
     for(int i=0;i<n;i++) {
-        kI(ns)[i]=(int)date32_array->Value(i);
+	    //Parquet date format is offset since 1970.01.01. this we need to subtract 10957 to turn to kdb date.
+        kI(ns)[i]=((int)date32_array->Value(i))-10957;
     }
     return 0;
 }
