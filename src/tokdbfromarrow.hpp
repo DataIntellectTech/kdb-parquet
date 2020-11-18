@@ -89,14 +89,15 @@ int arrowtoBoolvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     return 0;
 }
 
-int arrowtoTimestampvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowtoTimestampMSvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
 //   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
     auto time32_array = std::static_pointer_cast<arrow::TimestampArray>(arrow->chunk(0));
-    ns=ktn(KT,n);
+    ns=ktn(KP,n);
+    //This is number of MS since 1970.01.01D00:00:00.000.
     for(int i=0;i<n;i++) {
-        kI(ns)[i]=(int)time32_array->Value(i);
+        kJ(ns)[i]=(1000000*((long)time32_array->Value(i)))-946684800000000000;
     }
     return 0;
 }
@@ -206,7 +207,7 @@ int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
    else if(thistype=="timestamp[ms]")
    {
 
-       arrowtoTimestampvector(ns,arrow);
+       arrowtoTimestampMSvector(ns,arrow);
    }
    else if(thistype=="date32[day]")
    {
