@@ -1,7 +1,20 @@
 action,ms,bytes,lang,code,repeat,minver,comment
-<<<<<<< HEAD
-true,0,0,q,(("double";"string";"bool";"string")~(flip table)[`type])&("one";"two";"three";"__index_level_0__")~exec name from table:.pq.getschema[ getdatafile "simple_example.parquet"],1,,test getschema
-=======
-true,0,0,q,(("double";"string";"bool";"string")~(flip table)[`type])&("one";"two";"three";"__index_level_0__")~exec name from table:.pq.getschema[`$"tests/testdata/simple_example.parquet"],1,,test getschema
+fail,0,0,q,.pq.getschema[1],1,,
+fail,0,0,q,.pq.getschema[``],1,,
+fail,0,0,q,.pq.getschema[""],1,,
 
->>>>>>> 9dda91128cb4da6e33a3e742998f74b477269dce
+true,0,0,q,(("double";"string";"bool";"string")~(flip table)[`type])&("one";"two";
+true,0,0,q,(("double";"string";"bool";"string")~(flip table)[`type])&("one";"two";"three";"__index_level_0__")~exec name from table:.pq.getschema[ getdatafile "simple_example.parquet"],1,,test getschema
+true,0,0,q,(("double";"string";"bool";"string")~(flip table)[`type])&("one";"two";"three";"__index_level_0__")~exec name from table:.pq.getschema[`$"tests/testdata/simple_example.parquet"],1,,test getschema
+fail,0,0,q,.pq.getschema[`$"tests/testdata/simple_example.parquet"]
+ ,1,,
+fail,0,0,q,.pq.getschema[`$"tests/testdata/info.txt"]
+ ,1,,
+fail,0,0,q,.pq.getschema[getdatafile "doesntexist.parquet"],1,,
+true,0,0,q,`type=@[.pq.getschema;getdatafile "doesntexist.parquet";{[x] `$x}],1,,
+
+
+
+
+
+

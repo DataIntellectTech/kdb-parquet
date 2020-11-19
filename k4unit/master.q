@@ -8,6 +8,8 @@ o:.Q.def[myo;.Q.opt[.z.x]]
 
 //This line abstracts the location of the test data. [ Morris for each file in the folder myo[`datadir] please expalin whats in it at the bottom o fthis file`
 getdatafile:{[y;x] `$string[y],x}[myo[`datadir]]
+/.KU.VERBOSE:o`verbose
+
 
 //Load unit test raw code
 \l k4unit.q
@@ -16,7 +18,7 @@ getdatafile:{[y;x] `$string[y],x}[myo[`datadir]]
 //Add in better logic so that if o[`file] is non null we only load those tests.//For now well just laod the directory of tests.
 
 
-KUltd[o[`dir]]
+/KUltd[o[`dir]]
 $[o[`file]~`;KUltd[o[`dir]];KUltf[` sv o[`dir],o[`file]]]
 
 runtests:{[]
