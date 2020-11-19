@@ -1,23 +1,25 @@
 action,ms,bytes,lang,code,repeat,minver,comment
 fail,0,0,q,.pq.getfile[1],1,,Check function doesnt seg with a bad argument
+fail,0,0,q,.pq.getfile[`q],1,,Check function doesnt seg with a bad argument
+fail,0,0,q,.pq.getfile["q" 1],1,,Check function doesnt seg with a bad argument
 run,0,0,q,@[.pq.getfile;1;1b],1,,Check function can be error trapped when failing
 true,0,0,q,98h= type .pq.getfile getdatafile "test2.parquet",1,,Suppose dtofail as schema cant be obtained
-fail,0,0,q,.pq.getfile[getdatafile "doesntexist"],1,,
-true,0,0,q,`error=@[.pq.getfile;getdatafile "doesntexist";{[x] `$x}],1,,Check that error returned is `error`
+fail,0,0,q,.pq.getfile[getdatafile "doesntexist.parquet"],1,,
+true,0,0,q,`error=@[.pq.getfile;getdatafile "doesntexist.parquet";{[x] `$x}],1,,Ch eck that error returned is `error`
+fail,0,0,q,.pq.getfile[getdatafile "info.txt"],1,,test for non parquet file 
 true,0,0,q,2878=count .pq.getfile[getdatafile "test2.parquet"],1,,
-true,0,0,q,@[.pq.getfile; "info.txt";1b],1,,Check that reading a file that exists but isnt a parquet file returns a trappable error
-comment,0,,q,check function gives error if called with incorrect parameter type
-,
-fail,0,0,q,.pq.getfile[``],1,,
-
-comment,0,,q,tests for columns with type time,
-run,0,0,q,timetab:([]time:.z.T+3?10;int: 1 2 3),1,,
-
+true,0,0,q,@[.pq.getfile; "info.txt";1b],1,,Check that reading a file that exists  but isnt a parquet file returns a trappable error
+fail,0,0,q,.pq.getfile[``],1,,check function gives error for incorrect type
+true,0,0,q,`argtype=@[.pq.getfile;``;{[x] `$x}],1,,Check error is argtype
+run,0,0,q,timetab:([]time:.z.T+3?10;int: 1 2 3),1,,tests for columns with type tim e
 run,0,0,q,.pq.settabletofile[`there;timetab],1,,
 true,0,0,q,timetab~.pq.getfile[`there],1,,
 run,0,0,q,nulltab:([]f:(0n;0n); j:(0Nj;0Nj);i:(0Ni;0Ni);t:(0Nt;0Nt);c:(" ";" "))
-,1,,creates table full of nulls
-run,0,0,q,.pq.settabletofile[`:here;nulltab],1,,saves table full of nulls
-true,0,0,q,nulltab~.pq.getfile[`:here],1,,tests whether nulltab read back in correctly
-fail,0,0,q,.pq.getfile[`q],1,,
+ ,1,,creates table full of nulls
+run,0,0,q,.pq.settabletofile[`here;nulltab],1,,saves table full of nulls
+true,0,0,q,nulltab~.pq.getfile[`here],1,,tests whether nulltab read back in correc tly
+run,0,0,q,hdel `:here,1,,
+run,0,0,q,hdel `:there,1,,
+
+
 

@@ -1,7 +1,7 @@
 / k4 unit testing, loads tests from csv's, runs+logs to database
 / csv columns: action,ms,bytes,lang,code (csv with colheaders)
 / if your code contains commas enclose the whole code in "quotes"
-/ usage: qk4unit.q -p 5001
+/ usage: q k4unit.q -p 5001
 / KUT <-> KUnit Tests
 KUT:([]action:`symbol$();ms:`int$();bytes:`long$();lang:`symbol$();code:`symbol$();repeat:`int$();minver:`float$();file:`symbol$();comment:())
 / KUltd `:dirname and/or KUltf `:filename.csv
@@ -76,11 +76,9 @@ KUrt:{ / (run tests) - run contents of KUT, save results to KUTR
 		i+:1];
 	exec KUexec'[lang;code;repeat] from KUT where action=`afterall;
 	if[.KU.VERBOSE;-1(string .z.Z)," end"];
-	neg before-count KUTR
- }
+	neg before-count KUTR}
 
-KUpexec:{[prefix;lang;code;repeat;allowfail]
-/ show code; 
+KUpexec:{[prefix;lang;code;repeat;allowfail] 
 	s:prefix,(string lang),")",$[1=repeat;string code;"do[",(string repeat),";",(string code),"]"];
 	if[1<.KU.VERBOSE;-1 s];$[.KU.DEBUG&allowfail;value s;@[value;s;`FA1L]]}
 
