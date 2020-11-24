@@ -71,6 +71,7 @@ K getfile(K x) {
 }
 extern "C"
 K getschema(K x) {
+    if(-11!=x->t){return krr("argtype");}; 
     char* s=x->s;
     K ns=(K)0;
     std::string ms(s);
