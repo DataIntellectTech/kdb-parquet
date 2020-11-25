@@ -10,9 +10,12 @@ o:.Q.def[myo;.Q.opt[.z.x]]
 getdatafile:{[y;x] `$string[y],x}[myo[`datadir]]
 /.KU.VERBOSE:o`verbose
 
-
+\l p.q
+p)import pandas as pd
+p)import pyarrow.parquet as pq
 //Load unit test raw code
 \l k4unit.q
+
 .KU.VERBOSE:o`verbose
 
 //Add in better logic so that if o[`file] is non null we only load those tests.//For now well just laod the directory of tests.

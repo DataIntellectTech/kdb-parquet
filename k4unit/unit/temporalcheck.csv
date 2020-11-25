@@ -1,0 +1,12 @@
+action,ms,bytes,lang,code,repeat,minver,comment
+true,0,0,q,02:00:00.000~(exec from .pq.getfile[getdatafile "Time32.parquet"])`Time32,1,,
+true,0,0,q,2020.10.03~(exec from .pq.getfile[getdatafile "Date.parquet"])`Date
+,1,,
+true,0,0,q,(exec from .pq.getfile[getdatafile "Timestamp.parquet"])`Timestamp
+,1,,not working yet
+true,0,0,q,(exec from .pq.getfile[getdatafile "Timestamp_micro.parquet"])
+,1,,not working yet
+true,0,0,q,(exec from .pq.getfile[getdatafile "Time64.parquet"])
+,1,,not working
+
+

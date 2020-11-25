@@ -1,0 +1,29 @@
+there are several python files that can be used to read and write parquet files
+
+1. create_parquet_demo.py
+
+kdb-Apache/Python/create_parquet_demo.py creates a simple parquet file based on the pandas dataframe in the file:
+
+df = pd.DataFrame({'one': [1,2,3],
+                   'two': ['a', 'b', 'c'],
+                   'three': [True, False, True]},
+                   index=list('abc'))
+
+this dataframe can be modified as required and the extra fields added to the 
+fields variable list using the pyarrow datatypes found at https://arrow.apache.org/docs/python/api/datatypes.html
+
+to create the parquet file using this python file simply run this file with the name of the parquet file you would like to be created at the command line:
+python create_parquet_demo.py	example.parquet
+
+2. read_parquet_demo.py
+kdb-Apache/Python/read_parquet_demo.py
+enter the parquet file that you wish to read in as a command line paramater
+read_parquet_demo.py example.parquet
+
+3. write.p
+kdb-apache/tests/testdata/write.p
+
+4. read.q
+kdb-apache/tests/testdata/read.q
+
+

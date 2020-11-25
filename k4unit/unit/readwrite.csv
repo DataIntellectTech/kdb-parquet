@@ -1,0 +1,14 @@
+action,ms,bytes,lang,code,repeat,minver,comment
+run,0,0,q,\l ../tests/testdata/write.p,1,,can delete this
+
+run,0,0,q,tab1:.pq.getfile[`$"time32python.parquet"],1,,
+run,0,0,q,tab2:([]Time32:(00:00:00.000;01:00:00.000;02:00:00.000;03:00:00.000;04:00:00.000)),1,,Check function can be error trapped when failing
+
+run,0,0,q,.pq.settabletofile[`time32kdb.parquet;tab2],1,,
+run,0,0,q,\l ../tests/testdata/read.q,1,,functoin call 
+
+true,0,0,q,t ~tab1,1,,
+run,0,0,q,hdel `:time32kdb.parquet,1,,
+run,0,0,q,hdel `:time32python.parquet,1,,
+
+
