@@ -2,7 +2,7 @@ action,ms,bytes,lang,code,repeat,minver,comment
 run,0,0,q,.p.set[`pather;"../tests/testdata/"],1,,can delete this
 run,0,0,q,.p.set[`filer;"time32python.parquet"],1,,can delete this
 
-run,0,0,q,\l ../tests/testdata/converter_new.p,1,,can delete this
+run,0,0,q,\l ../Python/converter_new.q,1,,can delete this
 true,0,0,q,time32_list~0D00:00:00.000000000 0D01:00:00.000000000 0D02:00:00.000000000 0D03:00:00.000000000 0D04:00:00.000000000
 ,1,,can delete this
 

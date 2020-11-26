@@ -1,10 +1,12 @@
 p)import pandas as pd
 
 p)import pyarrow.parquet as pq
+p)row="Time32"
+qrow:.p.py2q[.p.pyget`row]
+
 p)def converter():
      
      filename=pather+filer
-     row = "Time32"
     #pfile=pq.read_table(source=str(filename)))
     #print(pfile.to_pydict()[str(row)])[1].hour
      #filename = "../tests/testdata/time32python.parquet"
