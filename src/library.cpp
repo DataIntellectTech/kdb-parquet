@@ -128,9 +128,13 @@ return xD(x,y);
 }
 
 extern "C"
-K streamread(K file,K callback,K batchsize)
-{
-    kstreamread("tests/testdata/parquet1.parquet");
+K streamread(K file,K callback)
+{   
+    char* s=file->s;
+    char* cb=callback->s;
+    std::string ms(s);
+    std::string cbk(cb);
+    kstreamread(ms,cbk);
     return (K)0;
 }
 
@@ -170,7 +174,7 @@ K getparquetlib(K a) {
     kK(y)[9] = dl((V *) getvar, 1);
 
     kS(x)[10] = ss((char *) "streamread");
-    kK(y)[10] = dl((V *) streamread, 3);
+    kK(y)[10] = dl((V *) streamread, 2);
 
     return xD(x, y);
 }
