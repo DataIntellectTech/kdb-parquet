@@ -1,7 +1,109 @@
-int tokdbfromparquet( parquet::StreamReader &os,std::string t, K x) {
-    int64_t k;
-    os>>k;
-std::cout <<  t << " " << k << std::endl;
+int tokdbfromparquet( NewStreamReader &os,std::string thistype, K &x) {
+      int64_t int64;
+      char ch;
+      char char_array[400];
+      int8_t int8;
+      uint16_t uint16;
+      int32_t int32;
+      uint64_t uint64;
+      uint32_t uint32;
+      double dble;
+      float flt;
+      bool myboolean;
+      std::string stringarray;
+      std::chrono::milliseconds ts_ms;
+      int i;
+   if(thistype=="double") {
+      os>>dble;
+      x=kf((double)dble);
+   }else if(thistype=="float")
+   {  
+    os>>flt;
+    x=kf((float)flt);
+   } else if(thistype=="int64")
+   { 
+     os>>int64;
+     x=kj(int64);
+   }else if(thistype=="string")
+   {
+      os>>stringarray;
+      x=kpn((char*)stringarray.c_str(),stringarray.length());
+   }
+   else if(thistype=="int32")
+   {
+      os>>int32;
+      x=ki(int32);
+   }
+   else if(thistype=="uint16")
+   {
+     os>>uint16;
+     x=kj((long)uint16);
+   }
+   else if(thistype=="uint32")
+   {
+       os>>uint32;
+       x=kj((long)uint16);
+   }
+   else if(thistype=="uint64")
+   {
+      os>>uint64;
+      x=kf((float)uint16);
+   }
+   else if(thistype=="bool")
+   {
 
+       os>>myboolean;
+       x=kb((int)myboolean);
+   }
+   else if(thistype=="time32[ms]")
+   {
+       int32_t tmp;
+       os.fun1(tmp);
+       x=kt(tmp);
+   }
+   else if(thistype=="time32[us]")
+   {
+       int32_t tmp;
+       os.fun1(tmp);
+       x=ktj(-KN,tmp);
+   }
+   else if(thistype=="timestamp[ms]")
+   {  
+       os>>int64;
+       x=ktj(-KP,1000*int64);
+   }
+   else if(thistype=="timestamp[us]")
+   {  
+       os>>int64;
+       x=ktj(-KP,int64);
+   }
+   else if(thistype=="date32[day]")
+   {
+      os.fun1(int32);
+      x=kd(int32);
+   }
+   else if(thistype=="null")
+   {
+      
+      x=(K)(0);
+      os>>int32;
+   }
+   else if(thistype=="decimal(2,1)")
+   {
+
+      x=(K)(0);
+      os>>int64;
+   }else if(thistype=="binary")
+   {
+
+      x=(K)(0);
+      os>>int64;
+   }
+   else
+   {
+
+       std::cout << " case is unknown "  << thistype << std::endl;
+       throw myexception;
+   }
 return 0;
 }

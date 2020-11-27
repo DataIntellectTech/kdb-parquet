@@ -27,7 +27,19 @@
 #include "parquet/stream_reader.h"
 
 #include "Kx/k.h"
-
+class NewStreamReader:public parquet::StreamReader
+{
+public:
+    NewStreamReader(std::unique_ptr<parquet::ParquetFileReader> reader)
+            : parquet::StreamReader{std::move(reader)} {}
+    NewStreamReader& fun1(int32_t& v) {
+        //CheckColumn(Type::INT64, ConvertedType::TIMESTAMP_MILLIS);
+        int32_t tmp;
+        Read<parquet::Int32Reader>(&tmp);
+        v = tmp;
+        return *this;
+    }
+};
 arrow::Status s;
 std::exception myexception;
 #include "tokdbfromarrow.hpp"
@@ -242,6 +254,7 @@ arrow::Status getschema(std::string file, std::shared_ptr<arrow::Schema> &schema
         parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader);
         if(NULL==reader.get()){throw myexception;}
         s = reader->GetSchema(&schema);
+
         if(!s.ok()){throw myexception;}
     } catch (...) {
         std::cout << "Could not get table schema " << std::endl;
@@ -331,42 +344,30 @@ int arrowtabletokdb( K &ns, std::shared_ptr<arrow::Table> &table)
 
 
 
-void printinput( parquet::StreamReader &os)
+int kstreamread(std::string file, std:: string callback)
 {
-    int64_t a,b,c;
-
-
-    os >> a;
-    os >> b;
-    os >> c;
-    os >> parquet::EndRow;
-    std::cout <<   a << " "<<  b << " " << c << " " <<std::endl;
-
-
-}
-int kstreamread(std::string file)
-{
-    std::cout <<    "Hello starting stream read  " << file << std::endl;
     std::shared_ptr<arrow::io::ReadableFile> infile;
-        auto p = (arrow::io::ReadableFile::Open("mystream", arrow::default_memory_pool()));
+        auto p = (arrow::io::ReadableFile::Open(file, arrow::default_memory_pool()));
         if (!p.ok()) { throw myexception; }
         infile = std::move(p).ValueOrDie();
-    parquet::StreamReader os{parquet::ParquetFileReader::Open(infile)};
+    NewStreamReader os{parquet::ParquetFileReader::Open(infile)};
     std::shared_ptr<arrow::Schema> thisschema;
-    s=getschema("mystream",thisschema);
+    s=getschema(file,thisschema);
     thisschema.get()->fields().at(0)->type()->ToString();
     int nc=os.num_columns();
     int nr=os.num_rows();
     K field;
-    K row=ktn(0,nc);
     std::cout <<   os.num_rows() << " " << os.num_columns() <<std::endl;
 
     for (int i = 0; !os.eof(); ++i) {
-       for(int j=0;j<nc;j++)
+    K  row=ktn(0,nc);
+	    for(int j=0;j<nc;j++)
        {
+	       
            tokdbfromparquet(os,thisschema.get()->fields().at(j)->type()->ToString(),field);
-
+           kK(row)[j]=field;
        }
+	k(0,"f",row,(K)0);
         os >> parquet::EndRow;
     }
   return 0;

@@ -15,7 +15,7 @@ extern int savechunksize;
 
 
 extern "C"
-int kstreamread(std::string);
+int kstreamread(std::string,std::string);
 extern "C"
 int kgetschema(K &ms,std::string s);
 extern "C"
