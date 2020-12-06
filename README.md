@@ -45,7 +45,7 @@ code[`test.parquet]
 ```
 ## Data type mappings ##
 
-The parquet intrinsic types are mapped according to the table below when reading and writing to and from kdb+. In some cases assumptions have been made, especially when considering symbol data types andcertain temporal data types. Where possible `getfile` and settabletofile should encode and decode fields so that the functions are essentially the reciprocals of one another.   
+The parquet intrinsic types are mapped according to the table below when reading and writing to and from kdb+. In some cases assumptions have been made, especially when considering symbol data types andcertain temporal data types. Where possible `getfile` and `settabletofile` should encode and decode fields so that the functions are essentially the reciprocals of one another.   
 
 |  Parquet Type  | Kdb Type |
 | ------------- | ------------- |
