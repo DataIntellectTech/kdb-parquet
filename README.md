@@ -10,6 +10,7 @@ After cloning the repository from GitHub the package and examples can be built b
 ## Examples
 Simple examples are available in the test file supplied. Examples are supplied for reading, writing and inspecting parquet files anddemonstarted.
 
+```
 KDB+ 3.6 2020.02.14 Copyright (C) 1993-2020 Kx Systems
 l64/ 4(16)core 15999MB james garage-linux 127.0.1.1 EXPIRE 2021.04.14 jamesbradley21@hotmail.com KOD #4170304
 
@@ -40,7 +41,7 @@ Streaming sample table: .pq.streamread[file]
 code[`test.parquet]
 ============================================
  Good bye 
-
+```
 
 
 
