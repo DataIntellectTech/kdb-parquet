@@ -5,7 +5,7 @@ Kdb-Apache is an library that is able to convert kdb tables to and from the Apac
 
 ## Build Instructions
 
-After cloning the repository from GitHub the package and examples can be built by executing cmake and then executing then make. The test folder contains a number of test scripts and a suite of unit tests has been supplied and discussed below. Please note that various standard utilities such as make and cmake are required. The package has been tested on vanillia Linux installs, though no reason exists why it cant be prted to other operating systems. 
+After cloning the repository from GitHub the package and examples can be built by executing cmake and then executing then make. The test folder contains a number of test scripts and a suite of unit tests has been supplied and discussed below. Please note that various standard utilities such as make and cmake are required. The package has been tested on vanillia Linux installs, though no reason exists why it cant be ported to other operating systems. 
 
 ## Examples
 after entering a q session using  q q/test.q
