@@ -8,69 +8,38 @@ Kdb-Apache is an library that is able to convert kdb tables to and from the Apac
 After cloning the repository from GitHub the package and examples can be built by executing cmake and then executing then make. The test folder contains a number of test scripts and a suite of unit tests has been supplied and discussed below. Please note that various standard utilities such as make and cmake are required. The package has been tested on vanillia Linux installs, though no reason exists why it cant be ported to other operating systems. 
 
 ## Examples
-after entering a q session using  q q/test.q
-.pq
+Simple examples are available in the test file supplied. Examples are supplied for reading, writing and inspecting parquet files anddemonstarted.
 
+KDB+ 3.6 2020.02.14 Copyright (C) 1993-2020 Kx Systems
+l64/ 4(16)core 15999MB james garage-linux 127.0.1.1 EXPIRE 2021.04.14 jamesbradley21@hotmail.com KOD #4170304
 
-below are all the functions available in the pq namespace.
-q).pq
-init             | code
-getproperties    | code
-getschema        | code
-getfile          | code
-getfilebycols    | code
-settabletofile   | code
-versioninfo      | code
-getfilebyindicies| code
-
-.pq.getschema reads in the column names and parquet types of the parquet file
-```
-q).pq.getschema[`$"tests/testdata/simple_example.parquet"]
-name                type
-----------------------------
-"one"               "double"
-"two"               "string"
-"three"             "bool"
-"__index_level_0__" "string"
-```
-
-
-.pq.getfile reads in a parquet file into a kdb table
-```
-q).pq.getfile[`$"tests/testdata/simple_example.parquet"]
-num chunks is 1
-num chunks is 1
-one two   three __index_level_0__
----------------------------------
--1  "foo" 1     ,"a"
-0   "bar" 0     ,"b"
-2.5 "baz" 1     ,"c"
-```
-
-.pq.getfilebycols reads in columns specified in a symbol list of the parquet file
-```
-q).pq.getfilebycols[`$"tests/testdata/simple_example.parquet";`one`two]
-num chunks is 1
-one two
----------
--1  "foo"
-0   "bar"
-2.5 "baz"
-```
-.pq.settabletofile saves a kdb table (second argument) to the filepath in the first argument which can then be read in as before using getfile:
-```
-alltab:([] c:("h";"w"); f:(21.5;22.6); i:(25;26); b:(1b;0b)) .pq.settabletofile[`here;alltab]
-```
-
-.pq.versioninfo[] shows build version info which can be updated as described in the Build Instructions section.
-q).pq.versioninfo[]
-builddatetime| "Wed Nov 11 17:40:03 2020"
-buildinfo    | "7.5.0"
-
-
-
-The tests/testdata directory contains 3 csv files with randomly generated data. Each field is of a different type and has the schema:
-[Time:datetime,float32:32 bit float, float64: 64 bit float, string:string,bool:boolean ]
+"Parquet file reading examples"
+============================================
+Saving sample table: .pq.settabletofile[file;tab]
+0i
+Reading sample table: .pq.getfile[file]
+j f d          s   
+-------------------
+1 3 2020.12.06 ,"a"
+2 4 2020.12.06 ,"b"
+3 5 2020.12.06 ,"c"
+Inspecting sample table: .pq.getschema[file]
+name type         
+------------------
+,"j" "int64"      
+,"f" "double"     
+,"d" "date32[day]"
+,"s" "string"     
+Reading subset of columns from file: .pq.getfilebycols[file;`j`f`d]
+j f d         
+--------------
+1 3 2020.12.06
+2 4 2020.12.06
+3 5 2020.12.06
+Streaming sample table: .pq.streamread[file]
+code[`test.parquet]
+============================================
+ Good bye 
 
 
 
