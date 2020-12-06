@@ -11,6 +11,7 @@ After cloning the repository from GitHub the package and examples can be built b
 Simple examples are available in the test file supplied. Examples are supplied for reading, writing and inspecting parquet files anddemonstarted.
 
 ```
+kdb@linux$ q q/examples.q
 KDB+ 3.6 2020.02.14 Copyright (C) 1993-2020 Kx Systems
 l64/ 4(16)core 15999MB **********************************************
 
