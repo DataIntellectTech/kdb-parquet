@@ -1,7 +1,7 @@
 # kdb-Apache
 
 Kdb-Apache is an library that is able to convert kdb tables to and from the Apache Parquet table format. The library provides a translation of most common kdb primitive data types to Apache Parquet equivilent. The library provides similiar functionality to the library at https://github.com/rianoc/qParquet
-, however the librray does not utilize the embedpy interface and potentially avoids an extra translation step when encodinga nd decoding files.
+, however the librray does not utilize the embedpy interface and potentially avoids an extra translation step when encoding and decoding files.
 
 ## Build Instructions
 
@@ -43,9 +43,14 @@ code[`test.parquet]
 ============================================
  Good bye 
 ```
+## Data type mappings ##
 
+The parquet intrinsic types are mapped according to the table below when reading and writing to and from kdb+. In some cases assumptions have been made, especially when considering symbol data types andcertain temporal data types. Where possible `getfile` and settabletofile should encode and decode fields so that the functions are essentially the reciprocals of one another.   
 
-
+|  Parquet Type  | Kdb Type |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
 
 
 | Table Kdb Api Function | Description                   | Arguments            | Usage                                    | Example Usage                                                            |
