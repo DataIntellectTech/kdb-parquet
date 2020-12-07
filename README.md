@@ -49,8 +49,23 @@ The parquet intrinsic types are mapped according to the table below when reading
 
 |  Parquet Type  | Kdb Type |
 | ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
+| Timestamp(ms) | 12h           |
+| Date32(day)   | 14h           |
+| Time32        | 19h           |
+| Time64        | nyi           |
+| int64         | 7h            |
+| one character string e.g "a"        | enlisted string e.g ,"a"           |
+| float32       | 9h            |
+| float64       | 9h            |
+| bool          | 1h            |
+| uint16        | 6h            |
+| uint32        | 7h            |
+| uint64        | 9h            |
+| Null          | 0h            |
+| decimal128    | nyi           |
+| binary        | nyi           |
+| Null          | 0h            |
+
 
 
 | Table Kdb Api Function | Description                   | Arguments            | Usage                                    | Example Usage                                                            |
