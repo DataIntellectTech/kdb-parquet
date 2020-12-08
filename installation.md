@@ -9,12 +9,15 @@
  
  export PATH=~/miniconda/bin:$PATH 
 ### create kdb conda environment:
-conda create --name kdb python=3.7.3
+ conda create --name kdb python=3.7.3
 
-conda activate kdb
-conda install -c kx embedPy
-conda install pandas
-conda install pyarrow
+ conda activate kdb
+ 
+ conda install -c kx embedPy
+ 
+ conda install pandas
+ 
+ conda install pyarrow
  
  
  ### to restore to normal environment:
