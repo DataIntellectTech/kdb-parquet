@@ -47,23 +47,23 @@ code[`test.parquet]
 
 The parquet intrinsic types are mapped according to the table below when reading and writing to and from kdb+. In some cases assumptions have been made, especially when considering symbol data types andcertain temporal data types. Where possible `getfile` and `settabletofile` should encode and decode fields so that the functions are essentially the reciprocals of one another.   
 
-|  Parquet Type  | Kdb Type |
-| ------------- | ------------- |
-| Timestamp(ms) | 12h Timestamp           |
-| Date32(day)   | 14h Date           |
-| Time32        | 19h Time           |
-| Time64        | nyi           |
-| int64         | 7h Long           |
-| one character string e.g "a"        | enlisted string e.g ,"a"           |
-| float32       | 9h double float           |
-| float64       | 9h double float            |
-| bool          | 1h bool           |
-| uint16        | 6h int           |
-| uint32        | 7h long           |
-| uint64        | 9h double float           |
-| decimal128    | nyi           |
-| binary        | nyi           |
-| Null          | 0h list            |
+|  Parquet Type  | kdb Type | |Example |
+| ------------- | ------------- | ------------|
+| Timestamp(ms) | Timestamp     | 2001.01.01D12:01:01:01.000000|
+| Date32(day)   | Date          | 2001.01.01                   |
+| Time32        | Time          |  12:01:01.000                |
+| Time64        | nyi           |    |
+| int64         | Long          |          12|                  
+|  string       | array of strings||
+| float32       | Float           ||
+| float64       | Float           ||
+| bool          | Boolean         ||
+| uint16        | Int             ||
+| uint32        | Long            ||
+| uint64        | Float           ||
+| decimal128    | nyi             ||
+| binary        | nyi             ||
+| Null          | 0h list         ||
 
 
 
