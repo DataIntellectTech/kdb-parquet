@@ -109,6 +109,21 @@ int kdbtoarrowDate32vector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& ar
     array.push_back(date32array);
     return 0;
 }
+int kdbtoarrowTimestampvector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& array)
+{
+    auto timestamp_type = std::make_shared<arrow::TimestampType>(arrow::TimeUnit::MICRO);
+     arrow::TimestampBuilder timestampbuilder(timestamp_type,arrow::default_memory_pool());
+    //Parquet timestamps are are from midnight 1970.01.01. this need to add 946684800000000 on  microseconds. `long$1970.01.01D00:00:00.000
+    //I cant seem to get this to create a nanosecond object. hence Ive left it as is.
+     for(int i=0;i<ns->n;i++) {
+        long long m=(long)((long)(kJ(ns)[i])/1000)+946684800000000;
+        timestampbuilder.Append(m);
+    }
+    std::shared_ptr<arrow::Array> timestamparray;
+    timestampbuilder.Finish(&timestamparray);
+    array.push_back(timestamparray);
+    return 0;
+}
 int kdbtoarrowMixedlist(K &ns, std::vector<std::shared_ptr<arrow::Array>>& array)
 {
     //Mixed lists and or nested lists not supported for now.
@@ -125,6 +140,7 @@ int addcolumntoarray(K column,std::vector<std::shared_ptr<arrow::Array>>& array)
         case(9):  return kdbtoarrowDoublevector(column,array);
         case(10): return kdbtoarrowCharvector(column,array);
         case(11): return kdbtoarrowSymbolvector(column,array);
+        case(12): return kdbtoarrowTimestampvector(column,array);
         case(14): return kdbtoarrowDate32vector(column,array);
         case(19): return kdbtoarrowTimevector(column,array);
         default:  return kdbtoarrowint64vector(column,array);
@@ -145,6 +161,7 @@ std::shared_ptr<arrow::Field>createfield(std::string name,int ktype){
         case(9): return arrow::field(name,arrow::float64());
         case(10): return arrow::field(name,arrow::utf8());
         case(11): return arrow::field(name,arrow::utf8());
+        case(12): return arrow::field(name,arrow::timestamp(arrow::TimeUnit::MICRO));
         case(14): return arrow::field(name,arrow::date32());
         case(19): return arrow::field(name,arrow::time32(arrow::TimeUnit::MILLI));
         default: ;

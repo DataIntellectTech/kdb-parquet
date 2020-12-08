@@ -89,6 +89,18 @@ int arrowtoBoolvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     return 0;
 }
 
+int arrowtoTimestampUSvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+{
+    int n=arrow->length();
+    auto time64_array = std::static_pointer_cast<arrow::TimestampArray>(arrow->chunk(0));
+    ns=ktn(KP,n);
+    //This is number of US since 1970.01.01D00:00:00.000.
+    for(int i=0;i<n;i++) {
+        kJ(ns)[i]=(1000*((long)time64_array->Value(i)))-946684800000000000;
+    }
+    return 0;
+}
+
 int arrowtoTimestampMSvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
@@ -127,7 +139,6 @@ int arrowtoDatevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 int arrowtofloat32vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
     auto float32_array = std::static_pointer_cast<arrow::FloatArray>(arrow->chunk(0));
     ns=ktn(KF,n);
     for(int i=0;i<n;i++) {
@@ -138,7 +149,6 @@ int arrowtofloat32vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 int arrowtofloat64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
     auto date32_array = std::static_pointer_cast<arrow::Date32Array>(arrow->chunk(0));
     ns=ktn(KD,n);
     for(int i=0;i<n;i++) {
@@ -149,7 +159,6 @@ int arrowtofloat64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 int arrowtoNullvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
     ns=ktn(0,n);
     for(int i=0;i<n;i++) {
         kK(ns)[i]=ktn(0,0);
@@ -160,8 +169,6 @@ int arrowtoNullvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
 {
   std::string thistype=  arrow->type()->ToString();
- // std::cout << arrow.get()->type()->ToString() << "wwww" << std::endl;
-  //  std::cout << arrow.get()->length() << " length wwww" << std::endl;
    if(thistype=="double") {
        arrowtoDoublevector(ns,arrow);
    }else if(thistype=="float")
@@ -208,6 +215,11 @@ int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
    {
 
        arrowtoTimestampMSvector(ns,arrow);
+   }
+   else if(thistype=="timestamp[us]")
+   {
+
+       arrowtoTimestampUSvector(ns,arrow);
    }
    else if(thistype=="date32[day]")
    {
