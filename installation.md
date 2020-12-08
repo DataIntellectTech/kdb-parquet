@@ -22,3 +22,9 @@
  
  ### to restore to normal environment:
  conda deactivate
+ 
+ ### to see installed correctly:
+ 
+ enter a q session and type q)p)print(1+1)
+ 
+ use \l p.q to access the .p namespace
