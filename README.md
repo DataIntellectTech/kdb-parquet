@@ -95,7 +95,7 @@ Unit Tests are automated using the K4unit testing library from KX
 Our tests are run using the master.q file which has 2 flags to indicate whether the user wishes the tests to be printed to the screen or not and which .pq namespace function to run unit tests for. The default is verbose:2 which prints the test to the screen and for all the tests to be run. 
 
 ```
- mstranger@homer:~/kdb-Apache/k4unit$ q master.q -verbose 2 -file getfile.csv
+ kdb@homer:~/kdb-Apache/k4unit$ q master.q -verbose 2 -file getfile.csv
 KDB+ 4.0 2020.07.15 Copyright (C) 1993-2020 Kx Systems
 l64/ 24()core 128387MB mstranger homer 127.0.1.1 EXPIRE 2021.06.30 AquaQ #59946
 
