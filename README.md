@@ -84,7 +84,7 @@ The parquet intrinsic types are mapped according to the table below when reading
 | .pq.getfile            | retrieves table               | &lt;filepath&gt;           |  ``.pq.getfile[`simple_example.parquet]`` |   
 | .pq.getfilebycols      | retrives columns from tables  | &lt;filepath&gt; &lt;col_list&gt; |``.pq.getfilebycols[`simple_example.parquet;`cols1`col2]``|
 | .pq.settabletofile     | saves to a file               | &lt;filepath&gt;&lt;table&gt;|  ``.pq.settabletofile[`here;([]a:1 2 3;b:3 4 5)]`` |
-| .pq.versioninfo        | shows build version and date  | no arguments         |               `.pq.versioninfo[]`                                 |
+| .pq.versioninfo        | shows build version and date  |         |               `.pq.versioninfo[]`                                 |
 | .pq.streamread         |                               |                      |                                          |
 
 
