@@ -47,46 +47,47 @@ code[`test.parquet]
 
 The parquet intrinsic types are mapped according to the table below when reading and writing to and from kdb+. In some cases assumptions have been made, especially when considering symbol data types andcertain temporal data types. Where possible `getfile` and `settabletofile` should encode and decode fields so that the functions are essentially the reciprocals of one another.   
 
-|  Parquet Type  | Kdb Type |
-| ------------- | ------------- |
-| Timestamp(ms) | 12h Timestamp           |
-| Date32(day)   | 14h Date           |
-| Time32        | 19h Time           |
-| Time64        | nyi           |
-| int64         | 7h Long           |
-| one character string e.g "a"        | enlisted string e.g ,"a"           |
-| float32       | 9h double float           |
-| float64       | 9h double float            |
-| bool          | 1h bool           |
-| uint16        | 6h int           |
-| uint32        | 7h long           |
-| uint64        | 9h double float           |
-| decimal128    | nyi           |
-| binary        | nyi           |
-| Null          | 0h list            |
+|  Parquet Type  | kdb Type | Example |
+| ------------- | ------------- | ------------|
+| Timestamp(ms) | Timestamp     | 2001.01.01D12:01:01:01.000000|
+| Date32(day)   | Date          | 2001.01.01                   |
+| Time32        | Time          | 12:01:01.000                |
+| Time64        | nyi           |    |
+| int64         | Long          |          12|                  
+| string        | array of characters||
+| float32       | Float           |1.0|
+| float64       | Float           |1.0|
+| bool          | Boolean         |0b|
+| uint16        | Int             |12i|
+| uint32        | Long            |12|
+| uint64        | Float           |12.3|
+| decimal128    | nyi             ||
+| binary        | nyi             ||
+| Null          | 0h list         |()|
 
+## Api Usage Table
 
-
-| Table Kdb Api Function | Description                   | Arguments            | Usage                                    | Example Usage                                                            |
-|------------------------|-------------------------------|----------------------|------------------------------------------|--------------------------------------------------------------------------|
-| Init                   | Initialize                    |                      |                                          |                                                                          |
-| .pq.getproperties      |                               |                      |                                          |                                                                          |
-| .pq.getschema          | shows columns and their types | <filepath>           | .pq.getschema[<filepath>]                | .pq.getschema[`$"tests/testdata/simple_example.parquet"]                 |
-| .pq.getfile            | retrieves table               | <filepath>           | .pq.getfile[<filepath>]                  | .pq.getfile[`$"tests/testdata/simple_example.parquet"]                   |
-| .pq.getfilebycols      | retrives columns from tables  | <filepath><col_list> | .pq.getfilebycols[<filepath>;<col_list>] | .pq.getfilebycols[getdatafile "simple_example.parquet";`one`two]         |
-| .pq.settabletofile     | saves to a file               | <filepath><table>    | .pq.settabletofile[<filepath>;<table>]   | ```alltab:([]c:("h";"w");b:(1b;0b))  .pq.settabletofile[`here;alltab]``` |
-| .pq.versioninfo        | shows build version and date  | no arguments         |                                          | .pq.versioninfo[]                                                        |
-| .pq.getfilebyindices   |                               |                      |                                          |                                                                          |
-|                        |                               |                      |                                          |                                                                          |
-
+| Table Kdb Api Function | Description                   | Arguments            | Usage                                    | Example Usage                                     | 
+|------------------------|-------------------------------|----------------------|------------------------------------------|---------------------------------------------------|
+| Init                   | Initialize                    |                      |                                          |                                                   |  
+| .pq.getproperties      |                               |                      |                                          |                                                   |   
+| .pq.getschema          | shows columns and their types | &lt;filepath&gt;           | .pq.getschema[filepath]           |``.pq.getschema[`$"tests/testdata/simple_example.parquet"]``|   
+| .pq.getfile            | retrieves table               | &lt;filepath&gt;           | .pq.getfile[filepath]             | ``.pq.getfile[`$"tests/testdata/simple_example.parquet"]`` |   
+| .pq.getfilebycols      | retrives columns from tables  | &lt;filepath&gt; &lt;col_list&gt; | .pq.getfilebycols[filepath;col_list] |`.pq.getfilebycols[getdatafile "simple_example.parquet";col_list]`       |
+| .pq.settabletofile     | saves to a file               | &lt;filepath&gt;&lt;table&gt;| .pq.settabletofile[filepath;table] | `alltab:([]c:("h";"w");b:(1b;0b))` ``.pq.settabletofile[`here;alltab]`` |
+| .pq.versioninfo        | shows build version and date  | no arguments         |                                          | `.pq.versioninfo[]`                                 |
+| .pq.getfilebyindices   |                               |                      |                                          |                                                   |
+|                        |                               |                      |                                          |                                                   |
+without alltab definition, getfilebyindices,.pq.streamread,
 Unit Tests are automated using the K4unit testing library from KX
-https://github.com/simongarland/k4unit
+
 
 Our tests are run using the master.q file which has 2 flags to indicate whether the user wishes the tests to be printed to the screen or not and which .pq namespace function to run unit tests for. The default is verbose:2 which prints the test to the screen and for all the tests to be run. 
-q master.q -verbose "2" -file "getfile.csv"
 
+## Unit Testing
 
 ```
+q master.q -verbose 2 -file getfile.csv
 17
 2020.11.12T18:59:36.166 start
 2020.11.12T18:59:36.166 :unit/getfile.csv 12 test(s)
@@ -132,3 +133,13 @@ true   0  0     q    timetab~.pq.getfile[`there]        1      :unit/getfile.csv
 "#####################################"
 q)
 ```
+
+
+
+q)\t timeconvert "simple_example.parquet"
+one  | -1          2.5
+two  | "foo" "bar" "baz"
+three| 1     0     1
+176
+
+
