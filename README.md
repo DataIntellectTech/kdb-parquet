@@ -65,7 +65,7 @@ The parquet intrinsic types are mapped according to the table below when reading
 | binary        | nyi             ||
 | Null          | 0h list         |()|
 
-
+## Api Usage Table
 
 | Table Kdb Api Function | Description                   | Arguments            | Usage                                    | Example Usage                                     | 
 |------------------------|-------------------------------|----------------------|------------------------------------------|---------------------------------------------------|
@@ -80,13 +80,14 @@ The parquet intrinsic types are mapped according to the table below when reading
 |                        |                               |                      |                                          |                                                   |
 
 Unit Tests are automated using the K4unit testing library from KX
-https://github.com/simongarland/k4unit
+
 
 Our tests are run using the master.q file which has 2 flags to indicate whether the user wishes the tests to be printed to the screen or not and which .pq namespace function to run unit tests for. The default is verbose:2 which prints the test to the screen and for all the tests to be run. 
-q master.q -verbose "2" -file "getfile.csv"
 
+## Unit Testing
 
 ```
+q master.q -verbose 2 -file getfile.csv
 17
 2020.11.12T18:59:36.166 start
 2020.11.12T18:59:36.166 :unit/getfile.csv 12 test(s)
