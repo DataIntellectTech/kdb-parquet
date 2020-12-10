@@ -5,13 +5,16 @@ Kdb-Apache is an library that is able to convert kdb tables to and from the Apac
 ## Build Instructions
 
 First step is to clone the TorQ-Quanthouse repository as shown below.
-mstranger@homer:~$ git clone https://github.com/AquaQAnalytics/kdb-Apache
-Once the repositpry has been successfully cloned can run the build with cmake . in the kdb-Apache directory and then make:
 
-mstranger@homer:~/kdb-Apache$ cmake .
-mstranger@homer:~/kdb-Apache$ make
+`mstranger@homer:~$ git clone https://github.com/AquaQAnalytics/kdb-Apache`
 
-After cloning the repository from GitHub the package and examples can be built by executing cmake and then executing then make. The test folder contains a number of test scripts and a suite of unit tests has been supplied and discussed below. Please note that various standard utilities such as make and cmake are required. The package has been tested on vanillia Linux installs, though no reason exists why it cant be ported to other operating systems. 
+After cloning the repository from GitHub the package and examples can be built by executing cmake and then executing then make. The test folder contains a number of test scripts and a suite of unit tests has been supplied and discussed below. Please note that various standard utilities such as make and cmake are required. The package has been tested on vanillia Linux installs, though no reason exists why it cant be ported to other operating systems.
+
+`mstranger@homer:~/kdb-Apache$ cmake .`
+
+`mstranger@homer:~/kdb-Apache$ make`
+
+ 
 
 ## Examples
 Simple examples are available in the test file supplied. Examples are supplied for reading, writing and inspecting parquet files anddemonstarted.
