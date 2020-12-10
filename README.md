@@ -51,19 +51,19 @@ The parquet intrinsic types are mapped according to the table below when reading
 | ------------- | ------------- | ------------|
 | Timestamp(ms) | Timestamp     | 2001.01.01D12:01:01:01.000000|
 | Date32(day)   | Date          | 2001.01.01                   |
-| Time32        | Time          |  12:01:01.000                |
+| Time32        | Time          | 12:01:01.000                |
 | Time64        | nyi           |    |
 | int64         | Long          |          12|                  
-|  string       | array of strings||
-| float32       | Float           ||
-| float64       | Float           ||
-| bool          | Boolean         ||
-| uint16        | Int             ||
-| uint32        | Long            ||
-| uint64        | Float           ||
+| string        | array of characters||
+| float32       | Float           |1.0|
+| float64       | Float           |1.0|
+| bool          | Boolean         |0b|
+| uint16        | Int             |12i|
+| uint32        | Long            |12|
+| uint64        | Float           |12.3|
 | decimal128    | nyi             ||
 | binary        | nyi             ||
-| Null          | 0h list         ||
+| Null          | 0h list         |()|
 
 
 
