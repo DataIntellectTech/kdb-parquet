@@ -1,6 +1,6 @@
 # kdb-Apache
 
-Kdb-Apache is an library that is able to convert kdb tables to and from the Apache Parquet table format. The library provides a translation of most common kdb primitive data types to Apache Parquet equivilent. The library provides similiar functionality to the library [here](https://github.com/rianoc/qParquet), however the library does not utilize the embedpy interface and potentially avoids an extra translation step when encoding and decoding files.
+Kdb-Apache is an library that is able to convert kdb tables to and from the Apache Parquet table format. The library provides a translation of most common kdb primitive data types to Apache Parquet equivilent and vice versa. The codebase provides similiar functionality to the library [here](https://github.com/rianoc/qParquet), however the library does not utilize the embedpy interface and potentially avoids an extra translation step when encoding and decoding files.
 
 ## Build Instructions
 
