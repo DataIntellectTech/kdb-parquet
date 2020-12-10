@@ -71,11 +71,11 @@ The parquet intrinsic types are mapped according to the table below when reading
 |------------------------|-------------------------------|----------------------|------------------------------------------|---------------------------------------------------|
 | Init                   | Initialize                    |                      |                                          |                                                   |  
 | .pq.getproperties      |                               |                      |                                          |                                                   |   
-| .pq.getschema          | shows columns and their types | &lt;filepath&gt;           | .pq.getschema[&lt;filepath&gt;]           |``.pq.getschema[`$"tests/testdata/simple_example.parquet"]``|   
-| .pq.getfile            | retrieves table               | &lt;filepath&gt;           | .pq.getfile[&lt;filepath&gt;]             | ``.pq.getfile[`$"tests/testdata/simple_example.parquet"]`` |   
-| .pq.getfilebycols      | retrives columns from tables  | &lt;filepath&gt; &lt;col_list&gt; | .pq.getfilebycols[&lt;filepath&gt;;&lt;col_list&gt;] |.pq.getfilebycols[getdatafile "simple_example.parquet";]       |
-| .pq.settabletofile     | saves to a file               | &lt;filepath&gt;&lt;table&gt;| .pq.settabletofile[&lt;filepath&gt;;&lt;table&gt;] | `alltab:([]c:("h";"w");b:(1b;0b))` ``.pq.settabletofile[`here;alltab]`` |
-| .pq.versioninfo        | shows build version and date  | no arguments         |                                          | .pq.versioninfo[]                                 |
+| .pq.getschema          | shows columns and their types | &lt;filepath&gt;           | .pq.getschema[filepath]           |``.pq.getschema[`$"tests/testdata/simple_example.parquet"]``|   
+| .pq.getfile            | retrieves table               | &lt;filepath&gt;           | .pq.getfile[filepath]             | ``.pq.getfile[`$"tests/testdata/simple_example.parquet"]`` |   
+| .pq.getfilebycols      | retrives columns from tables  | &lt;filepath&gt; &lt;col_list&gt; | .pq.getfilebycols[filepath;col_list] |`.pq.getfilebycols[getdatafile "simple_example.parquet";col_list]`       |
+| .pq.settabletofile     | saves to a file               | &lt;filepath&gt;&lt;table&gt;| .pq.settabletofile[filepath;table] | `alltab:([]c:("h";"w");b:(1b;0b))` ``.pq.settabletofile[`here;alltab]`` |
+| .pq.versioninfo        | shows build version and date  | no arguments         |                                          | `.pq.versioninfo[]`                                 |
 | .pq.getfilebyindices   |                               |                      |                                          |                                                   |
 |                        |                               |                      |                                          |                                                   |
 
