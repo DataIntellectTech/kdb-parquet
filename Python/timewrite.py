@@ -8,7 +8,7 @@ import pyarrow as pa
 from datetime import datetime, timedelta
 import string
 import decimal
-parquet_path = "../tests/testdata/"
+parquet_path = "./tests/testdata/"
 parquet_name = "timer.parquet"
 
 
@@ -44,7 +44,7 @@ def write_parquet_file():
     date="2020-11"
     df = pd.read_csv('./csv1.csv',parse_dates=['Timestamp'])#,date_parser=custom_date_parser)
     df["Time32"]=pd.date_range("2020-01", periods=num_rows, freq='H').time
-    #df["Time64"]=pd.date_range(date, periods=num_rows, freq='H').time
+    df["Time64"]=pd.date_range(date, periods=num_rows, freq='H').time
     # df["Date32"]=pd.date_range(date, periods=num_rows, freq='M').date
     df["Date"]=pd.date_range(date, periods=num_rows, freq='M').date
     df["Timestamp_us"]=pd.date_range(date, periods=num_rows, freq='H').astype("datetime64[ns]")
@@ -57,7 +57,7 @@ def write_parquet_file():
                 pa.field("Date",pa.date32()),
           
                pa.field("Time32",pa.time32("ms")),
-              #pa.field("Time64",pa.time64("ns")),
+               pa.field("Time64",pa.time64("ns")),
               # pa.field("Date32",pa.date32()),
               # pa.field("Date",pa.date64()),
               pa.field("Timestamp_us",pa.timestamp("us")),
