@@ -78,7 +78,7 @@ The parquet intrinsic types are mapped according to the table below when reading
 | .pq.versioninfo        | shows build version and date  | no arguments         |                                          | `.pq.versioninfo[]`                                 |
 | .pq.getfilebyindices   |                               |                      |                                          |                                                   |
 |                        |                               |                      |                                          |                                                   |
-
+without alltab definition, getfilebyindices,.pq.streamread,
 Unit Tests are automated using the K4unit testing library from KX
 
 
@@ -133,3 +133,13 @@ true   0  0     q    timetab~.pq.getfile[`there]        1      :unit/getfile.csv
 "#####################################"
 q)
 ```
+
+
+
+q)\t timeconvert "simple_example.parquet"
+one  | -1          2.5
+two  | "foo" "bar" "baz"
+three| 1     0     1
+176
+
+
