@@ -8,6 +8,8 @@ import pyarrow as pa
 from datetime import datetime, timedelta
 import string
 import decimal
+parquet_path = "../tests/testdata/"
+parquet_name = "timer.parquet"
 
 
 '''This code block creates a CSV file with num_rows number of rows'''
@@ -70,14 +72,14 @@ def write_parquet_file():
  
 
     # table1 = pa.Table.from_pandas(df)
-    pq.write_table(table1, 'timer.parquet',allow_truncated_timestamps=False)#,)#)#,coerce_timestamps="ms")
+    pq.write_table(table1, parquet_path+parquet_name,allow_truncated_timestamps=False)#,)#)#,coerce_timestamps="ms")
 
 write_parquet_file()
 
 '''reads the parquet file into a pandas dataframe and prints it along with its schema.
 '''
 def read_parquet_file():
-  pfile = pq.read_table(source="./timer.parquet")
+  pfile = pq.read_table(source=parquet_path+parquet_name)
   return pfile,pfile.to_pandas()
 
 read_parquet_file()
