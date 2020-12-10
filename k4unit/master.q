@@ -1,5 +1,5 @@
 
-myo:`init`dir`file`libname`datadir`verbose!(1b;`:unit;`;`$"../libPQ";`$"../tests/testdata/";2)
+myo:`init`dir`file`libname`datadir`verbose`row!(1b;`:unit;`;`$"../libPQ";`$"../tests/testdata/";2;`)
 o:.Q.def[myo;.Q.opt[.z.x]]
 .lg.o:{[x]1(.z.P;x)}
 
@@ -10,9 +10,7 @@ o:.Q.def[myo;.Q.opt[.z.x]]
 getdatafile:{[y;x] `$string[y],x}[myo[`datadir]]
 /.KU.VERBOSE:o`verbose
 
-\l p.q
-p)import pandas as pd
-p)import pyarrow.parquet as pq
+\l python_setup.q
 //Load unit test raw code
 \l k4unit.q
 
@@ -23,6 +21,7 @@ p)import pyarrow.parquet as pq
 
 /KUltd[o[`dir]]
 $[o[`file]~`;KUltd[o[`dir]];KUltf[` sv o[`dir],o[`file]]]
+if[o[`file]~`readwrite_v2.csv;.p.set[`pather;"../tests/testdata/"];.p.set[`filer;"time32python.parquet"];row:string o[`row];system "l ../Python/converter_new.q"]
 
 runtests:{[]
  KUrt[];

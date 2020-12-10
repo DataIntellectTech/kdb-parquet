@@ -1,7 +1,3 @@
-action,ms,bytes,lang,code,repeat,minver,comment
-run,0,0,q,.p.set[`pather;"../tests/testdata/"],1,,
-run,0,0,q,.p.set[`filer;"time32python.parquet"],1,,
-
-run,0,0,q,\l ../Python/converter_new.q,1,,
+action,ms,bytes,lang,code,repeat,minver,comment,
 true,0,0,q,(exec Time32 from .pq.getfile[getdatafile "time32python.parquet"])~`time$time32_list,1,,
 

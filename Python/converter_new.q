@@ -1,6 +1,6 @@
-p)import pandas as pd
+data:`file`col!(`$"../tests/testdata/","time32python.parquet";`Time32)
+o:.Q.def[data;.Q.opt[.z.x]]
 
-p)import pyarrow.parquet as pq
 p)row="Time32"
 qrow:.p.py2q[.p.pyget`row]
 
@@ -27,7 +27,8 @@ p)def converter():
      secondlist=big_list[2]
      microsecondlist=big_list[3]
      return big_list
-converter:.p.get[`converter;<]
+python2q:{converter:.p.get[`converter;<]
 times_list:converter[]
 time32_list:(01:00:00.000000*times_list[0])+(00:01:00.000000*times_list[1])+(00:00:01.000000*times_list[2])+(00:00:00.001*times_list[3])
+}
 
