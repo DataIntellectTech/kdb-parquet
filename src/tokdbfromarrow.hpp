@@ -124,6 +124,19 @@ int arrowtoTimevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     }
     return 0;
 }
+
+int arrowtoTime64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow,int mult)
+{
+    int n=arrow->length();
+//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
+    auto time64_array = std::static_pointer_cast<arrow::Time64Array>(arrow->chunk(0));
+    ns=ktn(KN,n);
+    for(int i=0;i<n;i++) {
+        kJ(ns)[i]=(long)(time64_array->Value(i))*mult;
+    }
+    return 0;
+}
+
 int arrowtoDatevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
@@ -169,7 +182,7 @@ int arrowtoNullvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
 {
   std::string thistype=  arrow->type()->ToString();
-   if(thistype=="double") {
+    if(thistype=="double") {
        arrowtoDoublevector(ns,arrow);
    }else if(thistype=="float")
    {  arrowtofloat32vector(ns,arrow);
@@ -211,6 +224,16 @@ int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
 
        arrowtoTimevector(ns,arrow);
    }
+   else if(thistype=="time64[ns]")
+   {
+
+       arrowtoTime64vector(ns,arrow,1);
+   }
+   else if(thistype=="time64[us]")
+   {
+
+       arrowtoTime64vector(ns,arrow,1000);
+   }
    else if(thistype=="timestamp[ms]")
    {
 
@@ -233,10 +256,8 @@ int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
    }
    else
    {
-       //ns=ktn(0,arrow->length());
-
-       std::cout << " case is unknown"  << std::endl;
-       throw myexception;
+    ns=ktn(0,0);
+    //   throw myexception;
    }
 
   return 0;

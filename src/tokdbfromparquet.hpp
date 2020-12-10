@@ -58,14 +58,20 @@ int tokdbfromparquet( NewStreamReader &os,std::string thistype, K &x) {
    else if(thistype=="time32[ms]")
    {
        int32_t tmp;
-       os.fun1(tmp);
+       os.customint32(tmp);
        x=kt(tmp);
    }
    else if(thistype=="time32[us]")
    {
        int32_t tmp;
-       os.fun1(tmp);
+       os.customint32(tmp);
        x=ktj(-KN,tmp);
+   }
+   else if(thistype=="time64[ns]")
+   {
+       int32_t tmp;
+       x=(K)0;
+       throw myexception;
    }
    else if(thistype=="timestamp[ms]")
    {  
@@ -79,30 +85,29 @@ int tokdbfromparquet( NewStreamReader &os,std::string thistype, K &x) {
    }
    else if(thistype=="date32[day]")
    {
-      os.fun1(int32);
+      os.customint32(int32);
       x=kd(int32);
    }
    else if(thistype=="null")
-   {
-      
+   { 
       x=(K)(0);
-      os>>int32;
+      throw myexception;
+
    }
    else if(thistype=="decimal(2,1)")
    {
 
       x=(K)(0);
-      os>>int64;
+      throw myexception;      
    }else if(thistype=="binary")
    {
 
       x=(K)(0);
-      os>>int64;
+      throw myexception;
    }
    else
    {
-
-       std::cout << " case is unknown "  << thistype << std::endl;
+       x=(K)(0);
        throw myexception;
    }
 return 0;

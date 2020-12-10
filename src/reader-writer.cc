@@ -32,13 +32,14 @@ class NewStreamReader:public parquet::StreamReader
 public:
     NewStreamReader(std::unique_ptr<parquet::ParquetFileReader> reader)
             : parquet::StreamReader{std::move(reader)} {}
-    NewStreamReader& fun1(int32_t& v) {
+    NewStreamReader& customint32(int32_t& v) {
         //CheckColumn(Type::INT64, ConvertedType::TIMESTAMP_MILLIS);
         int32_t tmp;
         Read<parquet::Int32Reader>(&tmp);
         v = tmp;
         return *this;
     }
+
 };
 arrow::Status s;
 std::exception myexception;
@@ -357,17 +358,21 @@ int kstreamread(std::string file, std:: string callback)
     int nc=os.num_columns();
     int nr=os.num_rows();
     K field;
-    std::cout <<   os.num_rows() << " " << os.num_columns() <<std::endl;
-
     for (int i = 0; !os.eof(); ++i) {
     K  row=ktn(0,nc);
 	    for(int j=0;j<nc;j++)
-       {
-	       
+           { 
+	   try {
            tokdbfromparquet(os,thisschema.get()->fields().at(j)->type()->ToString(),field);
            kK(row)[j]=field;
+	   } catch(...)
+	    {
+	      	    field=ktn(0,0);
+		   os.SkipColumns(1);
+		   kK(row)[j]=field;
+	   }
        }
-	k(0,"f",row,(K)0);
+	k(0,ss((char*)callback.c_str()),row,(K)0);
         os >> parquet::EndRow;
     }
   return 0;

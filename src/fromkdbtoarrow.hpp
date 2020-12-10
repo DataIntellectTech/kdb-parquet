@@ -56,7 +56,6 @@ int kdbtoarrowCharvector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& arra
     arrow::StringBuilder stringbuilder;
     for(int i=0;i<ns->n;i++) {
         char m=(char)kG(ns)[i];
-        //std::cout << " length wwww  " << mystr <<std::endl;
         stringbuilder.Append(std::string(1,m));
     }
     std::shared_ptr<arrow::Array> stringarray;
@@ -69,7 +68,6 @@ int kdbtoarrowSymbolvector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& ar
     arrow::StringBuilder stringbuilder;
     for(int i=0;i<ns->n;i++) {
         std::string m((char*)(kS(ns)[i]));
-        //std::cout << " length wwww  " << mystr <<std::endl;
         stringbuilder.Append(m);
     }
     std::shared_ptr<arrow::Array> stringarray;
@@ -80,19 +78,15 @@ int kdbtoarrowSymbolvector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& ar
 }
 int kdbtoarrowTimevector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& array)
 {
-    std::cout << " length wwww  " << "eee"<<std::endl;
     arrow::Time32Builder timebuilder(arrow::time32(arrow::TimeUnit::MILLI),arrow::default_memory_pool());
 
     for(int i=0;i<ns->n;i++) {
         long m=(long)kI(ns)[i];
-        std::cout << " length wwww  " << m <<std::endl;
         timebuilder.Append(m);
     }
     std::shared_ptr<arrow::Array> timearray;
     timebuilder.Finish(&timearray);
-    std::cout << " length wwww  " << " here " <<std::endl;
     array.push_back(timearray);
-    std::cout << " length wwww  " << " here now " <<std::endl;
     return 0;
 }
 int kdbtoarrowDate32vector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& array)
