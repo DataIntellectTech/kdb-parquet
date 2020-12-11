@@ -158,19 +158,11 @@ true   0  0     q    nulltab~.pq.getfile[`here] 1      :unit/getfile.csv 0   0  
 "#####################################"
 ```
 ## Comparison to EmbedPy interface
-We have a script demo.q that utilises embedpy to convert python datatypes from a pandas dataframe to kdb datatypes. Below is a comparison of the time taken to read in a file using this interface with the timeconvert function to ParquetLib.
-
-mstranger@homer:~/kdb-Apache/tests/testdata$ q embedread.q
-KDB+ 4.0 2020.07.15 Copyright (C) 1993-2020 Kx Systems
-l64/ 24()core 128387MB mstranger homer 127.0.1.1 EXPIRE 2021.06.30 AquaQ #59946
-
-timing simple table read with embedpy interface: q)\t timeconvert "simple_example.parquet"
-one  | -1          2.5
-two  | "foo" "bar" "baz"
-three| 1     0     1
-13
+The embedPy interface ( add  a link) is a flexiable APi that allows python and kdb+ to share memory and interact with each another. In theory the universe of functionality available within python is opened up to kdb+. However this flexability does come at a certain cost when it comes to performance. In the example below we create a simple parquet file with 1 million rows and a small number of columns and import this file into kdb+ via the embedpy interface and for comparison directly via the functionality available in this repository. It can be clearly seen example the translation of data into python and then subsequently to kdb+ has a large overhead, with the import being twice as slow. When working interactively with kdb+ this may not be an issue, however when speed is an issue for applications such as EOD exports from an external system this may be an important factor. Furthermore, the number of temporal variables supported natively, rather than needing special transformations when involving embedpy may be important. With that said the embedpy suite has a number of other features that make it generally a moreuseful tool. This example is mentto highlight the improvements that can be made by writing a custom application in this specific instance.  
 
 ## Future Work
+
+The next stage of this interface will be to potentially explore the possibility of allowing multiple kdb+ sessions to share data via the in-memory arrow format and a shared memory segment. In effect large tables would be loaded into one shared memory segment and made accessible via multiple different applications, potentially with the arrow table being appended to from a master process. For certain applications this could remove the need for IPC communication when operating on data sets and potentially reduce overall memory usage of the system as a whole. The actual practicalities of this design have not yet been considered.  
 
 
 
