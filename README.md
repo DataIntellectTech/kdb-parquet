@@ -269,5 +269,6 @@ q)\t taxidatajan2020:("IPPIFICIIIIIFFIFFF";enlist ",") 0: `:tests/testdata/yello
 
 The next stage of this interface will be to potentially explore the possibility of allowing multiple kdb+ sessions to share data via the in-memory arrow format and a shared memory segment. In effect large tables would be loaded into one shared memory segment and made accessible via multiple different applications, potentially with the arrow table being appended to from a master process. For certain applications this could remove the need for IPC communication when operating on data sets and potentially reduce overall memory usage of the system as a whole. The actual practicalities of this design have not yet been considered.  
 
+### Further Enquiries
 For more information, please contact AquaQ at info@aquaq.co.uk.
 
