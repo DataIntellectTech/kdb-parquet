@@ -1,10 +1,9 @@
 \l p.q
-/params:`filename`variable`row!("simple_example.parquet";`tab;`)
-/op:.Q.def[params;.Q.opt[.z.x]]
 
 p)import pyarrow.parquet as pq
 p)import pandas as pd
 p)def intcast(pfiler):
+    time64=[]
     timefile = pfiler.to_pandas()
     for col_index in range(len(timefile.columns)):
       datatype = pfiler.schema.types[col_index]
@@ -15,15 +14,30 @@ p)def intcast(pfiler):
         timefile[col_name]=timefile[col_name].astype(int).astype(str)
       elif datatype == "time32[ms]":
         timefile[col_name]=pd.to_datetime(timefile[col_name], format='%H:%M:%S').astype(int).astype(str)
+      elif datatype == "int64":
+        #timefile[col_name]=pd.to_datetime(timefile[col_name], format='%H:%M:%S').astype(int).astype(str)+"time64[ns]"
+        timefile[col_name]=timefile[col_name].astype(str)
     return timefile
 qintcast:.p.get[`intcast;<]
-
+//p)print(timefile)
 timeconvert:{[filename];df:(pd:.p.import`pandas)`:DataFrame;
  .p.set[`file;filename];
- .p.set[`pfile;.p.qeval "pq.read_table(source =file)"];
- .p.set[`timefile;.p.qeval "pfile.to_pandas()"];
+ .p.set[`pfile;.p.eval "pq.read_table(source =file)"];
+ .p.set[`types;.p.eval "pfile.schema.types"]
+ .p.set[`timefile;.p.eval "pfile.to_pandas()"];
+ .p.eval "print(timefile)";
  .p.set[`newdf;.p.eval "intcast(pfile)"];
+ .p.set[`time64_indices;.p.eval "[i for i, x in enumerate(types) if x == 'time64[ns]']"];
+ 
+ ind:.p.get[`time64_indices]`;
+ show ind;
  res:df[.p.get[`newdf]][`:to_dict;`list]`;
- res 
+ /a:.p.get[`time64];
+ /show a`; 
+ res
  }
+
+//on the pandas side, we need to check datatype for time 64
+//need to store column name/names for that particular column
+// need to turn each of them into strings looping through on q side
 
