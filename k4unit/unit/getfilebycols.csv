@@ -2,11 +2,11 @@ action,ms,bytes,lang,code,repeat,minver,comment
 true,0,0,q,{[x].pq.getfile[x]~.pq.getfilebycols[x;`$exec name from .pq.getschema[x]] }[getdatafile "mydata.parquet"],1,,test getfilebycols and get file should return the same thing if the second argumnet is all cols.
 true,0,0,q,{[x]( 1_flip .pq.getfile[x])~flip .pq.getfilebycols[x;1_`$exec name from .pq.getschema[x]] }[getdatafile "mydata.parquet"],1,,Drop the first col from getfilebycols and compare answer
 fail,0,0,q,.pq.getfilebycols[getdatafile "mydata.parquet";3 4],1,,Check that argument type is checked and cant seg
-true,0,0,q,`argtype=.[.pq.getfilebycols;(getdatafile "mydata.parquet";3 4);{[x] `$x} ].1..check that error returned is `argtype`
+true,0,0,q,`argtype=.[.pq.getfilebycols;(getdatafile "mydata.parquet";3 4);{[x] `$x} ],1,,check that error returned is `argtype`
 fail,0,0,q,.pq.getfilebycols[`mytestdata;`age`full_name],1,,Check that argument ty pe is checked and cant seg
 true,0,0,q,`error=.[.pq.getfilebycols;(`mytestdata;`age`fullname);{[x] `$x}],1,,Check that error returned is `error`
 fail,0,0,q,.pq.getfilebycols["wwww";`age`full_name],1,,Check that argument type is checked and cant seg
-true,0,0,q,`argtype=.[.pq.getfilebycols;( "wwww";`age`fullename);{[x] `$x} ].1..check that error returned is `argtype`
+true,0,0,q,`argtype=.[.pq.getfilebycols;( "wwww";`age`fullename);{[x] `$x} ],1,,check that error returned is `argtype`
 fail,0,0,q,.pq.getfilebycols[getdatafile "doesntexist.parquet";`age`full_name],1,, Repeat test witha file that doesnt exist [ Morris ]
 true,0,0,q,`error=.[.pq.getfilebycols;(getdatafile "doesntexist.parquet";`age`fullname);{[x] `$x}],1,,Check that error returned is `error`
 fail,0,0,q,.pq.getfilebycols[getdatafile "info.txt";`age`fullname],1,,Repeat test  witha file that exists but isnt a parquet file [ Morris ]

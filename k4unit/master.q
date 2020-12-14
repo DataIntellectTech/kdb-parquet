@@ -13,7 +13,7 @@ getdatafile:{[y;x] `$string[y],x}[myo[`datadir]]
 \l python_setup.q
 //Load unit test raw code
 \l k4unit.q
-
+\l embedread.q
 .KU.VERBOSE:o`verbose
 
 //Add in better logic so that if o[`file] is non null we only load those tests.//For now well just laod the directory of tests.
