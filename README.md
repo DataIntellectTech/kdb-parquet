@@ -147,12 +147,127 @@ true   0  0     q    nulltab~.pq.getfile[`here] 1      :unit/getfile.csv 0   0  
 "#####################################"
 ```
 
-## Comparison to EmbedPy interface
-The embedPy interface ( add  a link) is a flexiable APi that allows python and kdb+ to share memory and interact with each another. In theory the universe of functionality available within python is opened up to kdb+. However this flexability does come at a certain cost when it comes to performance. In the example below we create a simple parquet file with 1 million rows and a small number of columns and import this file into kdb+ via the embedpy interface and for comparison directly via the functionality available in this repository. It can be clearly seen example the translation of data into python and then subsequently to kdb+ has a large overhead, with the import being twice as slow. When working interactively with kdb+ this may not be an issue, however when speed is an issue for applications such as EOD exports from an external system this may be an important factor. Furthermore, the number of temporal variables supported natively, rather than needing special transformations when involving embedpy may be important. With that said the embedpy suite has a number of other features that make it generally a moreuseful tool. This example is mentto highlight the improvements that can be made by writing a custom application in this specific instance.  
+## Comparison to ETL EmbedPy interface
+The [embedPy interface](https://code.kx.com/q/ml/embedpy/) is a flexiable APi that allows python and kdb+ to share memory and interact with each another. In theory the universe of functionality available within python is opened up to kdb+. However this flexability does come at a certain cost when it comes to performance. In the example below we create a simple parquet file with 1 million rows and a small number of columns and import this file into kdb+ via the embedpy interface and for comparison directly via the functionality available in this repository. It can be clearly seen example the translation of data into python and then subsequently to kdb+ has a large overhead, with the import being twice as slow. When working interactively with kdb+ this may not be an issue, however when speed is an issue for applications such as EOD exports from an external system this may be an important factor. Furthermore, the number of temporal variables supported natively, rather than needing special transformations when involving embedpy may be important. With that said the embedpy suite has a number of other features that make it generally a more useful tool. This example is meant to highlight the improvements that can be made by writing a custom application in this specific instance:
 
+```
+(kdb) wlowe@homer:~/parquet/kdb-Apache$ q comparison.q
+KDB+ 4.0 2020.07.15 Copyright (C) 1993-2020 Kx Systems
+l64/ 24()core 128387MB wlowe homer 127.0.1.1 EXPIRE 2021.06.30 AquaQ #59946
+
+`.pq
+"Generating table and saving"
+time                          a  b
+-----------------------------------
+2020.12.14D13:01:06.648155000 81 12
+2020.12.14D13:01:06.648155001 2  10
+2020.12.14D13:01:06.648155002 80 1
+2020.12.14D13:01:06.648155003 96 90
+2020.12.14D13:01:06.648155004 95 73
+2020.12.14D13:01:06.648155005 94 90
+2020.12.14D13:01:06.648155006 72 43
+2020.12.14D13:01:06.648155007 87 90
+2020.12.14D13:01:06.648155008 89 84
+2020.12.14D13:01:06.648155009 58 63
+2020.12.14D13:01:06.648155010 79 93
+2020.12.14D13:01:06.648155011 64 54
+2020.12.14D13:01:06.648155012 21 38
+2020.12.14D13:01:06.648155013 31 97
+2020.12.14D13:01:06.648155014 75 88
+2020.12.14D13:01:06.648155015 78 58
+2020.12.14D13:01:06.648155016 17 68
+2020.12.14D13:01:06.648155017 44 45
+2020.12.14D13:01:06.648155018 62 2
+2020.12.14D13:01:06.648155019 1  39
+..
+0i
+"initialising EmbedPy functionality"
+{[f;x]embedPy[f;x]}[foreign]enlist
+{[x]tab:.qparquet.py.lib[`:getTable][string x]`;flip .p.wrap[tab][`:to_dict;`..
+"Time to read in using EmbedPy:"
+10981
+"Time to read in using our functionality"
+883
+"Done"
+```
+
+## Use Case - New York Taxi Data
+
+A use case can be demonstrated using [NYC taxi data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) from the NYC Taxi and Limousine Commission:
+```
+(kdb) wlowe@homer:~/parquet/kdb-Apache$ q q/test.q
+KDB+ 4.0 2020.07.15 Copyright (C) 1993-2020 Kx Systems
+l64/ 24()core 128387MB wlowe homer 127.0.1.1 EXPIRE 2021.06.30 AquaQ #59946
+
+`.pq
+q)taxidatajan2020:.pq.getfile[`taxidatajan2020.parquet]
+q)taxidatajan2020
+VendorID tpep_pickup_datetime          tpep_dropoff_datetime         passenge..
+-----------------------------------------------------------------------------..
+1        2020.01.01D00:28:15.000000000 2020.01.01D00:33:03.000000000 1       ..
+1        2020.01.01D00:35:39.000000000 2020.01.01D00:43:04.000000000 1       ..
+1        2020.01.01D00:47:41.000000000 2020.01.01D00:53:52.000000000 1       ..
+1        2020.01.01D00:55:23.000000000 2020.01.01D01:00:14.000000000 1       ..
+2        2020.01.01D00:01:58.000000000 2020.01.01D00:04:16.000000000 1       ..
+2        2020.01.01D00:09:44.000000000 2020.01.01D00:10:37.000000000 1       ..
+2        2020.01.01D00:39:25.000000000 2020.01.01D00:39:29.000000000 1       ..
+2        2019.12.18D15:27:49.000000000 2019.12.18D15:28:59.000000000 1       ..
+2        2019.12.18D15:30:35.000000000 2019.12.18D15:31:35.000000000 4       ..
+1        2020.01.01D00:29:01.000000000 2020.01.01D00:40:28.000000000 2       ..
+1        2020.01.01D00:55:11.000000000 2020.01.01D01:12:03.000000000 2       ..
+1        2020.01.01D00:37:15.000000000 2020.01.01D00:51:41.000000000 1       ..
+1        2020.01.01D00:56:27.000000000 2020.01.01D01:21:44.000000000 1       ..
+2        2020.01.01D00:21:54.000000000 2020.01.01D00:27:31.000000000 1       ..
+2        2020.01.01D00:38:01.000000000 2020.01.01D01:15:21.000000000 1       ..
+1        2020.01.01D00:15:35.000000000 2020.01.01D00:27:06.000000000 3       ..
+1        2020.01.01D00:41:20.000000000 2020.01.01D00:44:22.000000000 1       ..
+1        2020.01.01D00:56:38.000000000 2020.01.01D01:13:34.000000000 1       ..
+2        2020.01.01D00:08:21.000000000 2020.01.01D00:25:29.000000000 1       ..
+1        2020.01.01D00:25:39.000000000 2020.01.01D00:27:05.000000000 1       ..
+..
+```
+Now lets say we want to get all records where the passenger count is greater than 5:
+```
+q)select from taxidatajan2020 where passenger_count > 5
+VendorID tpep_pickup_datetime          tpep_dropoff_datetime         passenge..
+-----------------------------------------------------------------------------..
+1        2020.01.01D00:54:57.000000000 2020.01.01D00:58:50.000000000 6       ..
+2        2020.01.01D00:17:28.000000000 2020.01.01D00:37:16.000000000 6       ..
+2        2020.01.01D00:38:43.000000000 2020.01.01D00:54:55.000000000 6       ..
+2        2020.01.01D00:24:07.000000000 2020.01.01D00:27:48.000000000 6       ..
+2        2020.01.01D00:39:43.000000000 2020.01.01D00:45:55.000000000 6       ..
+2        2020.01.01D00:48:29.000000000 2020.01.01D00:55:05.000000000 6       ..
+2        2020.01.01D00:45:19.000000000 2020.01.01D01:00:10.000000000 6       ..
+2        2020.01.01D00:47:13.000000000 2020.01.01D00:54:52.000000000 6       ..
+2        2020.01.01D00:24:13.000000000 2020.01.01D00:27:36.000000000 6       ..
+2        2020.01.01D00:42:03.000000000 2020.01.01D01:01:42.000000000 6       ..
+2        2020.01.01D00:13:01.000000000 2020.01.01D00:22:33.000000000 6       ..
+2        2020.01.01D00:38:34.000000000 2020.01.01D00:41:49.000000000 6       ..
+2        2020.01.01D00:21:44.000000000 2020.01.01D00:35:27.000000000 6       ..
+2        2020.01.01D00:42:56.000000000 2020.01.01D00:59:50.000000000 6       ..
+2        2020.01.01D00:53:40.000000000 2020.01.02D00:18:40.000000000 6       ..
+2        2020.01.01D00:35:59.000000000 2020.01.01D00:44:34.000000000 6       ..
+2        2020.01.01D00:45:38.000000000 2020.01.01D00:50:19.000000000 6       ..
+2        2020.01.01D00:52:23.000000000 2020.01.01D00:55:58.000000000 6       ..
+2        2020.01.01D00:04:41.000000000 2020.01.01D00:12:37.000000000 6       ..
+2        2020.01.01D00:19:03.000000000 2020.01.01D00:37:13.000000000 6       ..
+..
+
+```
+We can also compare the difference in load times between csv and parquet files:
+Parquet:
+```
+q)\t .pq.getfile[`taxidatajan2020.parquet]
+10099
+```
+CSV (using standard kdb+ functionality):
+```
+q)\t taxidatajan2020:("IPPIFICIIIIIFFIFFF";enlist ",") 0: `:tests/testdata/yellow_tripdata_202001.csv
+11957
+```
 ## Future Work
 
 The next stage of this interface will be to potentially explore the possibility of allowing multiple kdb+ sessions to share data via the in-memory arrow format and a shared memory segment. In effect large tables would be loaded into one shared memory segment and made accessible via multiple different applications, potentially with the arrow table being appended to from a master process. For certain applications this could remove the need for IPC communication when operating on data sets and potentially reduce overall memory usage of the system as a whole. The actual practicalities of this design have not yet been considered.  
 
-
+For more information, please contact AquaQ at info@aquaq.co.uk.
 
