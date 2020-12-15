@@ -1,4 +1,4 @@
-0N!"Parquet file reading examples";
+0N!"Parquet file streaming example";
 
 l:`$":libPQ"
 file:`$"test.parquet"
@@ -20,11 +20,7 @@ initpq:{[x]
    -1 "============================================";
    -1 "Saving sample table: ",s:".pq.settabletofile[file;tab]"; 
    show value s;
-   -1 "Reading sample table: ",s:".pq.getfile[file]";
-   show value s;
-   -1 "Inspecting sample table: ",s:".pq.getschema[file]";
-   show value s;
-   -1 "Reading subset of columns from file: ",s:".pq.getfilebycols[file;`j`f`d]";
+   -1 "Streaming sample table: ",s:".pq.streamread[file]";
    show value s;
    -1 "============================================";
    -1 " Good bye ";
