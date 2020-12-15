@@ -195,13 +195,11 @@ time                          a  b
 
 A use case can be demonstrated using [NYC taxi data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) from the NYC Taxi and Limousine Commission:
 ```
-(kdb) wlowe@homer:~/parquet/kdb-Apache$ q q/test.q
-KDB+ 4.0 2020.07.15 Copyright (C) 1993-2020 Kx Systems
+(base) wlowe@homer:~/parquet/kdb-Apache$ q nyccomparison.q
+KDB+ 4.0 2020.06.18 Copyright (C) 1993-2020 Kx Systems
 l64/ 24()core 128387MB wlowe homer 127.0.1.1 EXPIRE 2021.06.30 AquaQ #59946
 
 `.pq
-q)taxidatajan2020:.pq.getfile[`taxidatajan2020.parquet]
-q)taxidatajan2020
 VendorID tpep_pickup_datetime          tpep_dropoff_datetime         passenge..
 -----------------------------------------------------------------------------..
 1        2020.01.01D00:28:15.000000000 2020.01.01D00:33:03.000000000 1       ..
@@ -225,10 +223,8 @@ VendorID tpep_pickup_datetime          tpep_dropoff_datetime         passenge..
 2        2020.01.01D00:08:21.000000000 2020.01.01D00:25:29.000000000 1       ..
 1        2020.01.01D00:25:39.000000000 2020.01.01D00:27:05.000000000 1       ..
 ..
-```
-Now lets say we want to get all records where the passenger count is greater than 5:
-```
-q)select from taxidatajan2020 where passenger_count > 5
+"Running an example select query:"
+"select from taxidatajan2020 where passenger_count > 5"
 VendorID tpep_pickup_datetime          tpep_dropoff_datetime         passenge..
 -----------------------------------------------------------------------------..
 1        2020.01.01D00:54:57.000000000 2020.01.01D00:58:50.000000000 6       ..
@@ -252,18 +248,12 @@ VendorID tpep_pickup_datetime          tpep_dropoff_datetime         passenge..
 2        2020.01.01D00:04:41.000000000 2020.01.01D00:12:37.000000000 6       ..
 2        2020.01.01D00:19:03.000000000 2020.01.01D00:37:13.000000000 6       ..
 ..
-
-```
-We can also compare the difference in load times between csv and parquet files:
-Parquet:
-```
-q)\t .pq.getfile[`taxidatajan2020.parquet]
-10099
-```
-CSV (using standard kdb+ functionality):
-```
-q)\t taxidatajan2020:("IPPIFICIIIIIFFIFFF";enlist ",") 0: `:tests/testdata/yellow_tripdata_202001.csv
-11957
+"Parquet loading times:"
+9652
+"CSV loading times:"
+9426
+"Loading in parquet, using a reduced number of columns"
+1904
 ```
 ## Future Work
 
