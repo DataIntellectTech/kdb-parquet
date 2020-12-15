@@ -4,7 +4,7 @@ Kdb-Apache is an library that is able to convert kdb tables to and from the Apac
 
 ## Build Instructions
 
-First step is to clone the TorQ-Quanthouse repository as shown below.
+First step is to clone the Kdb-Apache repository as shown below.
 
 `kdb@linux:~$ git clone https://github.com/AquaQAnalytics/kdb-Apache`
 
