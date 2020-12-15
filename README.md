@@ -26,42 +26,42 @@ After cloning the repository from GitHub the package and examples can be built b
  
 
 ## Examples
-Simple examples are available in the test file supplied. Examples are supplied for reading, writing and inspecting parquet files anddemonstarted.
+
+Simple examples are available in the test file supplied. Examples are supplied for reading, writing and inspecting parquet files and demonstrated.
 
 ```
-kdb@linux$ q q/examples.q
-KDB+ 3.6 2020.02.14 Copyright (C) 1993-2020 Kx Systems
-l64/ 4(16)core 15999MB **********************************************
+(base) kdb@linux:~/parquet/kdb-Apache$ q q/examples.q
+KDB+ 4.0 2020.06.18 Copyright (C) 1993-2020 Kx Systems
+l64/ 24()core 128387MB **********************************************
 
 "Parquet file reading examples"
 ============================================
 Saving sample table: .pq.settabletofile[file;tab]
 0i
 Reading sample table: .pq.getfile[file]
-j f d          s   
+j f d          s
 -------------------
-1 3 2020.12.06 ,"a"
-2 4 2020.12.06 ,"b"
-3 5 2020.12.06 ,"c"
+1 3 2020.12.15 ,"a"
+2 4 2020.12.15 ,"b"
+3 5 2020.12.15 ,"c"
 Inspecting sample table: .pq.getschema[file]
-name type         
+name type
 ------------------
-,"j" "int64"      
-,"f" "double"     
+,"j" "int64"
+,"f" "double"
 ,"d" "date32[day]"
-,"s" "string"     
+,"s" "string"
 Reading subset of columns from file: .pq.getfilebycols[file;`j`f`d]
-j f d         
+j f d
 --------------
-1 3 2020.12.06
-2 4 2020.12.06
-3 5 2020.12.06
-Streaming sample table: .pq.streamread[file]
-code[`test.parquet]
+1 3 2020.12.15
+2 4 2020.12.15
+3 5 2020.12.15
 ============================================
- Good bye 
+ Good bye
 ```
-## Data type mappings ##
+
+## Data type mappings 
 
 The parquet intrinsic types are mapped according to the table below when reading and writing to and from kdb+. In some cases assumptions have been made, especially when considering symbol data types andcertain temporal data types. Where possible `getfile` and `settabletofile` should encode and decode fields so that the functions are essentially the reciprocals of one another.   
 
@@ -83,6 +83,24 @@ The parquet intrinsic types are mapped according to the table below when reading
 | binary        | nyi             ||
 | Null          | 0h list         |()|
 
+## Streaming functionality
+
+An example of the streaming functionality is also included in the test file supplied.
+```
+(base) kdb@linux:~/parquet/kdb-Apache$ q q/streamexample.q
+KDB+ 4.0 2020.06.18 Copyright (C) 1993-2020 Kx Systems
+l64/ 24()core 128387MB **********************************************
+
+"Parquet file streaming example"
+============================================
+Saving sample table: .pq.settabletofile[file;tab]
+0i
+Streaming sample table: .pq.streamread[file]
+code[`test.parquet]
+============================================
+ Good bye
+````
+
 ## Api Usage Table
 
 | Table Kdb Api Function | Description                   | Arguments            | Example Usage                            | 
@@ -100,6 +118,7 @@ The parquet intrinsic types are mapped according to the table below when reading
 
 
 ## Unit Testing
+
 Unit Tests are automated using the K4unit testing library from KX
 Our tests are run using the master.q file which has 2 flags to indicate whether the user wishes the tests to be printed to the screen or not and which .pq namespace function to run unit tests for. The default is verbose:2 which prints the test to the screen and for all the tests to be run. 
 
@@ -148,7 +167,8 @@ true   0  0     q    nulltab~.pq.getfile[`here] 1      :unit/getfile.csv 0   0  
 "#####################################"
 ```
 
-## Comparison to ETL EmbedPy interface
+## Comparison to kx EmbedPy interface
+
 The [embedPy interface](https://code.kx.com/q/ml/embedpy/) is a flexiable APi that allows python and kdb+ to share memory and interact with each another. In theory the universe of functionality available within python is opened up to kdb+. However this flexability does come at a certain cost when it comes to performance. In the example below we create a simple parquet file with 1 million rows and a small number of columns and import this file into kdb+ via the embedpy interface and for comparison directly via the functionality available in this repository. It can be clearly seen example the translation of data into python and then subsequently to kdb+ has a large overhead, with the import being twice as slow. When working interactively with kdb+ this may not be an issue, however when speed is an issue for applications such as EOD exports from an external system this may be an important factor. Furthermore, the number of temporal variables supported natively, rather than needing special transformations when involving embedpy may be important. With that said the embedpy suite has a number of other features that make it generally a more useful tool. This example is meant to highlight the improvements that can be made by writing a custom application in this specific instance:
 
 ```
@@ -256,10 +276,12 @@ VendorID tpep_pickup_datetime          tpep_dropoff_datetime         passenge..
 "Loading in parquet, using a reduced number of columns"
 1904
 ```
+
 ## Future Work
 
 The next stage of this interface will be to potentially explore the possibility of allowing multiple kdb+ sessions to share data via the in-memory arrow format and a shared memory segment. In effect large tables would be loaded into one shared memory segment and made accessible via multiple different applications, potentially with the arrow table being appended to from a master process. For certain applications this could remove the need for IPC communication when operating on data sets and potentially reduce overall memory usage of the system as a whole. The actual practicalities of this design have not yet been considered.  
 
 ## Further Enquiries
+
 For more information, please contact AquaQ at info@aquaq.co.uk.
 
