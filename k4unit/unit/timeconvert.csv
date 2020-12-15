@@ -1,0 +1,6 @@
+action,ms,bytes,lang,code,repeat,minver,comment
+before,0,0,q,.pq.settabletofile[`$"../tests/testdata/kdbtemporal.parquet";kdbtemporal:([] date:.z.d + til 10; timestamp:.z.p + til 10; time:.z.t + til 10)],,," "
+true,0,0,q,(select date from kdbtemporal) ~ "D"$select date from flip timeconvert "kdbtemporal.parquet",,,"test date column"
+true,0,0,q,(select timestamp:timestamp-timestamp mod 1000 from kdbtemporal) ~ "P"$select timestamp from flip timeconvert "kdbtemporal.parquet",,,"test timestamp column"
+true,0,0,q,(select time from kdbtemporal) ~ "T"$select time from flip timeconvert "kdbtemporal.parquet",,,"test time column"
+after,0,0,q,hdel`$":../tests/testdata/kdbtemporal.parquet",,,"Clear the table we made"

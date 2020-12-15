@@ -17,8 +17,8 @@ p)def intcast(pfiler):
       elif datatype == "time32[ms]":
         timefile[col_name]=timefile[col_name].astype(str)
         #timefile[col_name]=pd.to_datetime(timefile[col_name], format='%H:%M:%S').astype(int).astype(str)
-      #elif datatype == "int64":
-        #timefile[col_name]=timefile[col_name].astype(str)
+      elif datatype == "time64[ns]":
+        timefile[col_name]=timefile[col_name].astype(str)
     return timefile
 qintcast:.p.get[`intcast;<]
 //p)print(timefile)
