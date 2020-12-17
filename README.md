@@ -126,7 +126,6 @@ kdb@linux:~/kdb-Apache/k4unit$ q master.q -file getfile.csv -verbose 1
 KDB+ 4.0 2020.07.15 Copyright (C) 1993-2020 Kx Systems
 l64/ 24()core 128387MB **********************************************
 
-
 `.pq
 24
 2020.12.11T09:27:00.682 start
@@ -203,7 +202,7 @@ time                          a  b
 0i
 "initialising EmbedPy functionality"
 {[f;x]embedPy[f;x]}[foreign]enlist
-{[x]tab:.qparquet.py.lib[`:getTable][string x]`;flip .p.wrap[tab][`:to_dict;`..
+{[x]tab:.qparquet.py.lib[`:getTable][string x]`;flip .p.wrap[tab][`:to_dict;`list]`}
 "Time to read in using EmbedPy:"
 10981
 "Time to read in using native functionality"
