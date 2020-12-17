@@ -209,7 +209,6 @@ time                          a  b
 883
 "Done"
 ```
-We can see the native functionality is a lot quicker than using EmbedPy.
 
 ## Use Case - New York Taxi Data
 
@@ -275,7 +274,6 @@ VendorID tpep_pickup_datetime          tpep_dropoff_datetime         passenge..
 "Loading in parquet, using a reduced number of columns"
 1904
 ```
-As we can see, loading the parquet file is much quicker, especially when we reduce the number of columns.
 
 ## Future Work
 
