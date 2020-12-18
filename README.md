@@ -1,14 +1,14 @@
 # kdb-Apache
 
-Kdb-Apache is an library that is able to convert kdb tables to and from the Apache Parquet table format. The library provides a translation of most common kdb primitive data types to Apache Parquet equivilent and vice versa. The codebase provides similiar functionality to the library [here](https://github.com/rianoc/qParquet), however the library does not utilize the embedpy interface and potentially avoids an extra translation step when encoding and decoding files.
+Kdb-Apache is a library that is able to convert kdb tables to and from the Apache Parquet table format. The library provides a translation of the most common kdb+ primitive data types to Apache Parquet equivalent and vice versa. The codebase provides similar functionality to the library [here](https://github.com/rianoc/qParquet), however, the library does not utilize the embedpy interface and potentially avoids an extra translation step when encoding and decoding datasets.
 
 ## Build Instructions
 
-First step is to clone the TorQ-Quanthouse repository as shown below.
+First step is to clone the Kdb-Apache repository as shown below.
 
 `kdb@linux:~$ git clone https://github.com/AquaQAnalytics/kdb-Apache`
 
-After cloning the repository from GitHub the package and examples can be built by executing cmake and then executing then make. The test folder contains a number of test scripts and a suite of unit tests has been supplied and discussed below. Please note that various standard utilities such as make and cmake are required. The package has been tested on vanillia Linux installs, though no reason exists why it cant be ported to other operating systems.
+After cloning the repository from GitHub the package and examples can be built by executing ```cmake .``` and then ```make```. The test folder contains a number of test scripts and a suite of unit tests has been supplied and discussed below. Please note that various standard utilities such as make and cmake are required. The package has been tested on vanilla Linux installs, though no reason exists why it can't be ported to other operating systems.
 
 
 `kdb@linux:~/kdb-Apache$ cmake .`
@@ -27,7 +27,7 @@ After cloning the repository from GitHub the package and examples can be built b
 
 ## Examples
 
-Simple examples are available in the test file supplied. Examples are supplied for reading, writing and inspecting parquet files and demonstrated.
+Simple examples are available in the test file supplied. These are supplied for reading, writing and inspecting parquet files and demonstrated.
 
 ```
 (base) kdb@linux:~/parquet/kdb-Apache$ q q/examples.q
@@ -63,7 +63,7 @@ j f d
 
 ## Data type mappings 
 
-The parquet intrinsic types are mapped according to the table below when reading and writing to and from kdb+. In some cases assumptions have been made, especially when considering symbol data types andcertain temporal data types. Where possible `getfile` and `settabletofile` should encode and decode fields so that the functions are essentially the reciprocals of one another.   
+The parquet intrinsic types are mapped according to the table below when reading and writing to and from kdb+. In some cases assumptions have been made, especially when considering symbol and certain temporal data types. Where possible `getfile` and `settabletofile` should encode and decode fields so that the functions are essentially the reciprocals of one another.   
 
 |  Parquet Type  | kdb Type | Example |
 | ------------- | ------------- | ------------|
@@ -101,9 +101,9 @@ code[`test.parquet]
  Good bye
 ````
 
-## Api Usage Table
+## API Usage Table
 
-| Table Kdb Api Function | Description                   | Arguments            | Example Usage                            | 
+| Table Kdb API Function | Description                   | Arguments            | Example Usage                            | 
 |------------------------|-------------------------------|----------------------|------------------------------------------|
 | Init                   | Initialize                    |                      |                                          | 
 | .pq.getproperties      |                               |                      |                                          | 
@@ -119,14 +119,12 @@ code[`test.parquet]
 
 ## Unit Testing
 
-Unit Tests are automated using the K4unit testing library from KX
-Our tests are run using the master.q file which has 2 flags to indicate whether the user wishes the tests to be printed to the screen or not and which .pq namespace function to run unit tests for. The default is verbose:2 which prints the test to the screen and for all the tests to be run. 
+Unit Tests are automated using the K4unit testing library from KX. Our tests are run using the master.q file which has 2 flags to indicate whether the user wishes the tests to be printed to the screen or not, and which .pq namespace function to run unit tests for. The default is verbosity is 2, which prints the test to the screen and for all the tests to be run. 
 
 ```
 kdb@linux:~/kdb-Apache/k4unit$ q master.q -file getfile.csv -verbose 1
 KDB+ 4.0 2020.07.15 Copyright (C) 1993-2020 Kx Systems
 l64/ 24()core 128387MB **********************************************
-
 
 `.pq
 24
@@ -167,9 +165,9 @@ true   0  0     q    nulltab~.pq.getfile[`here] 1      :unit/getfile.csv 0   0  
 "#####################################"
 ```
 
-## Comparison to kx EmbedPy interface
+## Comparison to Kx embedPy interface
 
-The [embedPy interface](https://code.kx.com/q/ml/embedpy/) is a flexiable APi that allows python and kdb+ to share memory and interact with each another. In theory the universe of functionality available within python is opened up to kdb+. However this flexability does come at a certain cost when it comes to performance. In the example below we create a simple parquet file with 1 million rows and a small number of columns and import this file into kdb+ via the embedpy interface and for comparison directly via the functionality available in this repository. It can be clearly seen example the translation of data into python and then subsequently to kdb+ has a large overhead, with the import being twice as slow. When working interactively with kdb+ this may not be an issue, however when speed is an issue for applications such as EOD exports from an external system this may be an important factor. Furthermore, the number of temporal variables supported natively, rather than needing special transformations when involving embedpy may be important. With that said the embedpy suite has a number of other features that make it generally a more useful tool. This example is meant to highlight the improvements that can be made by writing a custom application in this specific instance:
+The [embedPy interface](https://code.kx.com/q/ml/embedpy/) is a flexible API that allows python and kdb+ to share memory and interact with each other. In theory the universe of functionality available within python is opened up to kdb+. However this flexibility does come at a certain cost when it comes to performance. In the example below we create a simple parquet file with 1 million rows and a small number of columns and import this file into kdb+ via the embedpy interface and for comparison directly via the functionality available in this repository. The example clearly shows how the translation of data into python and then subsequently to kdb+ has a large overhead, with the import being twice as slow. When working interactively with kdb+ this may not be an issue, however when speed is an issue for applications such as EOD exports from an external system this may be an important factor. Furthermore, the number of temporal variables supported natively, rather than needing special transformations when involving embedpy may be important. With that said the embedpy suite has a number of other features that make it generally a more useful tool. This example is meant to highlight the improvements that can be made by writing a custom application in this specific instance.
 
 ```
 (kdb) kdb@linux:~/parquet/kdb-Apache$ q comparison.q
@@ -204,7 +202,7 @@ time                          a  b
 0i
 "initialising EmbedPy functionality"
 {[f;x]embedPy[f;x]}[foreign]enlist
-{[x]tab:.qparquet.py.lib[`:getTable][string x]`;flip .p.wrap[tab][`:to_dict;`..
+{[x]tab:.qparquet.py.lib[`:getTable][string x]`;flip .p.wrap[tab][`:to_dict;`list]`}
 "Time to read in using EmbedPy:"
 10981
 "Time to read in using native functionality"
@@ -214,7 +212,7 @@ time                          a  b
 
 ## Use Case - New York Taxi Data
 
-A use case can be demonstrated using [NYC taxi data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) from the NYC Taxi and Limousine Commission:
+A use case can be demonstrated using [NYC taxi data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page) from the NYC Taxi and Limousine Commission.
 ```
 (base) kdb@linux:~/parquet/kdb-Apache$ q nyccomparison.q
 KDB+ 4.0 2020.06.18 Copyright (C) 1993-2020 Kx Systems
@@ -270,9 +268,9 @@ VendorID tpep_pickup_datetime          tpep_dropoff_datetime         passenge..
 2        2020.01.01D00:19:03.000000000 2020.01.01D00:37:13.000000000 6       ..
 ..
 "Parquet loading times:"
-9652
+9459
 "CSV loading times:"
-9426
+11989
 "Loading in parquet, using a reduced number of columns"
 1904
 ```
