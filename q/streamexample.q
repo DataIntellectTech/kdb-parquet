@@ -20,7 +20,9 @@ initpq:{[x]
    -1 "============================================";
    -1 "Saving sample table: ",s:".pq.settabletofile[file;tab]"; 
    show value s;
-   -1 "Streaming sample table: ",s:".pq.streamread[file]";
+   -1 "Creating function for streamread : ",s:"f:{[x] show x}";
+   show value s;
+   -1 "Streaming sample table: ",s:".pq.streamread[file;`f]";
    show value s;
    -1 "============================================";
    -1 " Good bye ";
