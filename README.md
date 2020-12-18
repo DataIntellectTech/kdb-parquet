@@ -95,8 +95,20 @@ l64/ 24()core 128387MB **********************************************
 ============================================
 Saving sample table: .pq.settabletofile[file;tab]
 0i
-Streaming sample table: .pq.streamread[file]
-code[`test.parquet]
+Creating function for streamread : f:{[x] show x}
+Streaming sample table: .pq.streamread[file;`f]
+1
+3f
+2050.12.18
+,"a"
+2
+4f
+2050.12.18
+,"b"
+3
+5f
+2050.12.18
+,"c"
 ============================================
  Good bye
 ````
