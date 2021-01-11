@@ -20,14 +20,16 @@ initpq:{[x]
    -1 "============================================";
    -1 "Saving sample table: ",s:".pq.settabletofile[file;tab]"; 
    show value s;
-   -1 "Creating function for streamread : ",s:"f:{[x] show x}";
+   -1 "Creating blank list for each element to be inserted into: ",s:"t:()";
+   show value s;
+   -1 "Creating function for streamread : ",s:"f:{[x] t::t,x}";
    show value s;
    -1 "Streaming sample table: ",s:".pq.streamread[file;`f]";
    show value s;
+   -1 "Reformatting sample table: ",s:"flip(col)!flip(count col:`$exec name from .pq.getschema(file)) cut t";
+   show value s;
    -1 "============================================";
    -1 " Good bye ";
-    exit[0];  
+   /-exit[0];  
      }
-
-
 if[init;initpq[]];
