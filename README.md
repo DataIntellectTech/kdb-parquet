@@ -1,4 +1,4 @@
-# kdb-Parquet
+# Kdb-Parquet
 
 Kdb-Parquet is a library that is able to convert kdb tables to and from the Apache Parquet table format. The library provides a translation of the most common kdb+ primitive data types to Apache Parquet equivalent and vice versa. The codebase provides similar functionality to the library [here](https://github.com/rianoc/qParquet), however, the library does not utilize the embedpy interface and potentially avoids an extra translation step when encoding and decoding datasets.
 
