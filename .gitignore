@@ -1,0 +1,26 @@
+*.d
+*.slo
+*.lo
+*.o
+*.obj
+*.gch
+*.pch
+*.so
+*.dylib
+*.dll
+*.mod
+*.smod
+*.lai
+*.la
+*.a
+*.lib
+*.exe
+*.out
+*.app
+
+# ignore ide config
+.idea
+
+# ignore top level build folders
+build/
+cmake-build*/

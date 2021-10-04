@@ -1,0 +1,6 @@
+[submodule "thirdparty/vcpkg"]
+	path = thirdparty/vcpkg
+	url = https://github.com/microsoft/vcpkg
+[submodule "thirdparty/kx"]
+	path = thirdparty/kx
+	url = https://github.com/KxSystems/kdb
