@@ -1,5 +1,5 @@
 #include "library.h"
-#include "Kx/k.h"
+#include <k.h>
 #include <iostream>
 int savechunksize=10000;
 extern "C"

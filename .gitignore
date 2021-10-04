@@ -24,3 +24,4 @@
 # ignore top level build folders
 build/
 cmake-build*/
+thirdparty/

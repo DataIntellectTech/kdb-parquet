@@ -6,7 +6,9 @@
 
 #include <string>
 #include <vector>
-#include "Kx/k.h"
+
+#include <k.h>
+
 #undef U      // Collision between template types in c++ and this macro u.
 #undef R      // Collision between template types in c++ and this macro u.
 
