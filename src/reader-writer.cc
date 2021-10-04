@@ -26,7 +26,8 @@
 #include <parquet/exception.h>
 #include "parquet/stream_reader.h"
 
-#include "Kx/k.h"
+#include <k.h>
+
 class NewStreamReader:public parquet::StreamReader
 {
 public:

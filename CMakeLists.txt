@@ -15,15 +15,20 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 find_package(Arrow CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 
-
 include_directories(
         # Include the k.h header files
         "${CMAKE_SOURCE_DIR}/thirdparty/kx/c/c"
+        # Include the header files used for this library (library.h)
         "${CMAKE_SOURCE_DIR}/include")
 
-add_library("${PROJECT_NAME}" SHARED src/library.cpp include/library.h src/reader-writer.cc)
+# Create a shared library called libpq or pq.dll with the library and reader-writer files.
+add_library("${PROJECT_NAME}" SHARED
+        "${CMAKE_SOURCE_DIR}/src/library.cpp"
+        "${CMAKE_SOURCE_DIR}/src/reader-writer.cc")
 
-target_link_libraries("${PROJECT_NAME}" PRIVATE re2::re2 arrow_static parquet_static arrow_bundled_dependencies)
-target_link_libraries("${PROJECT_NAME}" PRIVATE spdlog::spdlog_header_only)
-
-
+# Link against re2, arrow and spdlog. Use header only & static linking so there are no
+# dependencies outside of the libpq file.
+target_link_libraries("${PROJECT_NAME}" PRIVATE
+        "re2::re2"
+        "arrow_static"
+        "spdlog::spdlog_header_only")
