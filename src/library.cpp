@@ -1,84 +1,82 @@
+#include "config.h"
 #include "library.h"
 #include <k.h>
 #include <iostream>
-int savechunksize=10000;
+
+int savechunksize = 10000;
 extern "C"
-K setvar(K x,K y)
-{
-if(-11!=x->t){return krr("argtype");};
-std::string ms((char*)x->s);
+K setvar(K x, K y) {
+    if (-11 != x->t) { return krr("argtype"); };
+    std::string ms((char *) x->s);
 //Set chunck size when saving.
-  if(ms=="savechunksize")
-  {
-      if(-7!=y->t) {return krr("argtype");};
-         savechunksize = y->j;
+    if (ms == "savechunksize") {
+        if (-7 != y->t) { return krr("argtype"); };
+        savechunksize = y->j;
 
-  }
-return (K)0;
+    }
+    return (K) 0;
 }
 
 
 extern "C"
-K getvar(K x)
-{
-        if(-11!=x->t){return krr("argtype");};
-        std::string ms((char*)x->s);
+K getvar(K x) {
+    if (-11 != x->t) { return krr("argtype"); };
+    std::string ms((char *) x->s);
 //Get chunck size when saving.
-        if(ms=="savechunksize"){return   kj(savechunksize);}
-        return (K)0;
+    if (ms == "savechunksize") { return kj(savechunksize); }
+    return (K) 0;
 }
 
 extern "C"
-K getfilebycols(K x,K cols) {
+K getfilebycols(K x, K cols) {
     char *s = x->s;
-    if(-11!=x->t){return krr("argtype");};
-    if(11!=cols->t){return krr("argtype");};
+    if (-11 != x->t) { return krr("argtype"); };
+    if (11 != cols->t) { return krr("argtype"); };
     K ns = (K) 0;
     std::string ms(s);
     std::string col;
     std::vector<std::string> colnames;
-    for(int i=0;i<cols->n;i++) {
+    for (int i = 0; i < cols->n; i++) {
         std::string col(kS(cols)[i]);
         colnames.push_back(col);
     }
-    try{
-    kgetfilebycols(ns,colnames, ms);
-    } catch(...)
-    {
-	    return krr("error");
+    try {
+        kgetfilebycols(ns, colnames, ms);
+    } catch (...) {
+        return krr("error");
     }
-  return ns;
+    return ns;
 }
 
-K getfilebyindicies(K x,K indicies) {
-   return krr("nyi");
+K getfilebyindicies(K x, K indicies) {
+    return krr("nyi");
 
-    return (K)0;
+    return (K) 0;
 }
+
 extern "C"
 K getfile(K x) {
-    if(-11!=x->t){return krr("argtype");};
-   char *s = x->s;
-   K ns = (K) 0;
-   try{
-    std::string ms(s);
+    if (-11 != x->t) { return krr("argtype"); };
+    char *s = x->s;
+    K ns = (K) 0;
+    try {
+        std::string ms(s);
         kgetfile(ns, ms);
-  }catch(...)
-{
- return krr( "error");
-}
+    } catch (...) {
+        return krr("error");
+    }
     return ns;
 }
 extern "C"
 K getschema(K x) {
-    if(-11!=x->t){return krr("argtype");}; 
-    char* s=x->s;
-    K ns=(K)0;
+    if (-11 != x->t) { return krr("argtype"); };
+    char *s = x->s;
+    K ns = (K) 0;
     std::string ms(s);
 
     try {
-       int i = kgetschema(ns,ms);
-    }catch(...) {
+        int i = kgetschema(ns, ms);
+    } catch (...) {
         krr("cant");
         return K(0);
     }
@@ -88,54 +86,71 @@ K getschema(K x) {
 
 extern "C"
 K init(K x) {
-    return (K)0;
+    return (K) 0;
 }
 
 extern "C"
 K getproperties(K x) {
-    return (K)0;
+    return (K) 0;
 }
 
-extern"C"
-K settabletofile(K file,K tab)
-{
-    int r=0;
-    char* s=file->s;
+extern "C"
+K settabletofile(K file, K tab) {
+    int r = 0;
+    char *s = file->s;
     std::string ms(s);
     try {
         r = ksettabletofile(tab, ms);
-    } catch(...) {
+    } catch (...) {
         krr("cantsave");
         return K(0);
     }
     return ki(r);
 }
 
-extern"C"
-K versioninfo(K a)
-{
- K y = ktn(0, 2);
- K x = ktn(KS, 2);
- 
- kS(x)[0] = ss((char *) "builddatetime");
- kK(y)[0] = kp(  __TIMESTAMP__  );
+extern "C"
+K versioninfo(K a) {
+    K y = ktn(0, 9);
+    K x = ktn(KS, 9);
 
- kS(x)[1] = ss((char *) "buildinfo");
- kK(y)[1] = kp( __VERSION__ ); 
+    kS(x)[0] = ss((char *) "build_date");
+    kK(y)[0] = kp(PQ_BUILD_DATE);
 
+    kS(x)[1] = ss((char *) "build_time");
+    kK(y)[1] = kp(PQ_BUILD_TIME);
 
-return xD(x,y);
+    kS(x)[2] = ss((char *) "build_ver");
+    kK(y)[2] = kp(PQ_VERSION_STR);
+
+    kS(x)[3] = ss((char *) "build_type");
+    kK(y)[3] = kp(CMAKE_BUILD_TYPE);
+
+    kS(x)[4] = ss((char *) "cmake_ver");
+    kK(y)[4] = kp(CMAKE_VERSION);
+
+    kS(x)[5] = ss((char *) "arrow_ver");
+    kK(y)[5] = kp(ARROW_TAG);
+
+    kS(x)[6] = ss((char *) "cxx_compiler");
+    kK(y)[6] = kp(CMAKE_CXX_COMPILER_ID);
+
+    kS(x)[7] = ss((char *) "cxx_compiler_ver");
+    kK(y)[7] = kp(CMAKE_CXX_COMPILER_VERSION);
+
+    kS(x)[8] = ss((char *) "cxx_compiler_flags");
+    kK(y)[8] = kp(CMAKE_CXX_FLAGS);
+
+    return xD(x, y);
 }
 
 extern "C"
-K streamread(K file,K callback)
-{   
-    char* s=file->s;
-    char* cb=callback->s;
+K streamread(K file, K callback) {
+    char *s = file->s;
+    char *cb = callback->s;
     std::string ms(s);
     std::string cbk(cb);
-    kstreamread(ms,cbk);
-    return (K)0;
+    kstreamread(ms, cbk);
+    return (K) 0;
 }
 
 extern "C"
