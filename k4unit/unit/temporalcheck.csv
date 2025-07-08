@@ -1,12 +1,10 @@
 action,ms,bytes,lang,code,repeat,minver,comment
 true,0,0,q,02:00:00.000~(exec from .pq.getfile[getdatafile "Time32.parquet"])`Time32,1,,
-true,0,0,q,2020.10.03~(exec from .pq.getfile[getdatafile "Date.parquet"])`Date
-,1,,
-true,0,0,q,(exec from .pq.getfile[getdatafile "Timestamp.parquet"])`Timestamp
-,1,,not working yet
-true,0,0,q,(exec from .pq.getfile[getdatafile "Timestamp_micro.parquet"])
-,1,,not working yet
-true,0,0,q,(exec from .pq.getfile[getdatafile "Time64.parquet"])
-,1,,not working
-
-
+true,0,0,q,2020.10.03~(exec from .pq.getfile[getdatafile "Date.parquet"])`Date,1,,
+true,0,0,q,(exec from .pq.getfile[getdatafile "Timestamp.parquet"])`Timestamp,1,,not working yet
+true,0,0,q,(exec from .pq.getfile[getdatafile "Timestamp_micro.parquet"]),1,,not working yet
+true,0,0,q,(exec from .pq.getfile[getdatafile "Time64.parquet"]),1,,not working
+true,0,0,q,flip[`ts`tstz!2#enlist 2023.01.01D12 2025.11.20D07:23:30.000005 2025.10.01D23:59:59]~.pq.getfile getdatafile"timestamp_us_tz.parquet",1,,
+true,0,0,q,flip[`ts`tstz!2#enlist 2023.01.01D12 2025.11.20D07:23:30 2025.10.01D23:59:59]~.pq.getfile getdatafile"timestamp_ms_tz.parquet",1,,
+true,0,0,q,([]tstz:2023.01.01D12 2025.11.20D07:23:30.000005 2025.10.01D23:59:59)~.pq.getfilebycols[getdatafile"timestamp_us_tz.parquet";enlist`tstz],1,,
+true,0,0,q,([]tstz:2023.01.01D12 2025.11.20D07:23:30 2025.10.01D23:59:59)~.pq.getfilebycols[getdatafile"timestamp_ms_tz.parquet";enlist`tstz],1,,

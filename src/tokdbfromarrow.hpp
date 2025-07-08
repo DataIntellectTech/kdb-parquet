@@ -234,12 +234,12 @@ int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
 
        arrowtoTime64vector(ns,arrow,1000);
    }
-   else if(thistype=="timestamp[ms]")
+   else if(thistype.rfind("timestamp[ms") == 0)
    {
 
        arrowtoTimestampMSvector(ns,arrow);
    }
-   else if(thistype=="timestamp[us]")
+   else if(thistype.rfind("timestamp[us") == 0)
    {
 
        arrowtoTimestampUSvector(ns,arrow);

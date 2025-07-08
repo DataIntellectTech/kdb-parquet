@@ -73,12 +73,12 @@ int tokdbfromparquet( NewStreamReader &os,std::string thistype, K &x) {
        x=(K)0;
        throw myexception;
    }
-   else if(thistype=="timestamp[ms]")
+   else if(thistype.rfind("timestamp[ms") == 0)
    {  
        os>>int64;
        x=ktj(-KP,1000*int64);
    }
-   else if(thistype=="timestamp[us]")
+   else if(thistype.rfind("timestamp[us") == 0)
    {  
        os>>int64;
        x=ktj(-KP,int64);
