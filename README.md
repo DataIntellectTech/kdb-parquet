@@ -8,7 +8,25 @@ First step is to clone the kdb-Parquet repository as shown below.
 
 `kdb@linux:~$ git clone https://github.com/AquaQAnalytics/kdb-parquet`
 
-After cloning the repository from GitHub the package and examples can be built by executing ```cmake .``` and then ```make```. The test folder contains a number of test scripts and a suite of unit tests has been supplied and discussed below. Please note that various standard utilities such as make and cmake are required. The package has been tested on vanilla Linux installs, though no reason exists why it can't be ported to other operating systems.
+<!-- TODO: make arrow build part of our makefile -->
+
+After cloning the repository from GitHub, checkout the arrow submodule:
+
+```
+kdb@linux:~/kdb-parquet$ git submodule init
+kdb@linux:~/kdb-parquet$ git submodule update
+```
+
+Next, build the the arrow shared objects:
+
+```
+kdb@linux:~/kdb-parquet$ cd rawlibs/arrow/cpp
+kdb@linux:~/kdb-parquet/rawlibs/arrow/cpp$ mkdir build && cd build
+kdb@linux:~/kdb-parquet/rawlibs/arrow/cpp/build$ cmake .. -DARROW_PARQUET=ON -DARROW_BUILD_SHARED=ON -DARROW_WITH_SNAPPY=ON
+kdb@linux:~/kdb-parquet/rawlibs/arrow/cpp/build$ make
+```
+
+Once this is done, you can build the PQ library by running ```cmake .``` and then ```make```. The test folder contains a number of test scripts and a suite of unit tests has been supplied and discussed below. Please note that various standard utilities such as make and cmake are required. The package has been tested on vanilla Linux installs, though no reason exists why it can't be ported to other operating systems.
 
 
 `kdb@linux:~/kdb-Parquet$ cmake .`

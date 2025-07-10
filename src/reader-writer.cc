@@ -26,6 +26,9 @@
 #include <parquet/exception.h>
 #include "parquet/stream_reader.h"
 
+#include <ctime>
+#include <iomanip> // For std::put_time (C++11)
+
 #include "Kx/k.h"
 class NewStreamReader:public parquet::StreamReader
 {
@@ -33,16 +36,30 @@ public:
     NewStreamReader(std::unique_ptr<parquet::ParquetFileReader> reader)
             : parquet::StreamReader{std::move(reader)} {}
     NewStreamReader& customint32(int32_t& v) {
-        //CheckColumn(Type::INT64, ConvertedType::TIMESTAMP_MILLIS);
-        int32_t tmp;
-        Read<parquet::Int32Reader>(&tmp);
+        return customInt<int32_t, parquet::Int32Reader>(v);
+    }
+    NewStreamReader& customint64(int64_t& v) {
+        return customInt<int64_t, parquet::Int64Reader>(v);
+    }
+
+private:
+    template <typename T, typename R>
+    NewStreamReader& customInt(T& v) {
+        T tmp;
+        Read<R>(&tmp);
         v = tmp;
         return *this;
     }
-
 };
+
 arrow::Status s;
 std::exception myexception;
+
+// The following are required to be able to save timestamps with nanosecond precision, which is desirable since kdb
+// timestamps are in nanoseconds.
+auto writerProps = parquet::WriterProperties::Builder().build();
+auto arrowProps = parquet::ArrowWriterProperties::Builder().coerce_timestamps(arrow::TimeUnit::NANO)->build();
+
 #include "tokdbfromarrow.hpp"
 #include "fromkdbtoarrow.hpp"
 #include "tokdbfromparquet.hpp"
@@ -96,8 +113,8 @@ void read_whole_file() {
                                     arrow::default_memory_pool()));
 
   std::unique_ptr<parquet::arrow::FileReader> reader;
-  PARQUET_THROW_NOT_OK(
-      parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader));
+  PARQUET_ASSIGN_OR_THROW(reader,
+      parquet::arrow::OpenFile(infile, arrow::default_memory_pool()));
   std::shared_ptr<arrow::Table> table;
   PARQUET_THROW_NOT_OK(reader->ReadTable(&table));
   std::cout << "Loaded " << table->num_rows() << " rows in " << table->num_columns()
@@ -114,8 +131,8 @@ void read_single_rowgroup() {
                                     arrow::default_memory_pool()));
 
   std::unique_ptr<parquet::arrow::FileReader> reader;
-  PARQUET_THROW_NOT_OK(
-      parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader));
+  PARQUET_ASSIGN_OR_THROW(reader,
+      parquet::arrow::OpenFile(infile, arrow::default_memory_pool()));
   std::shared_ptr<arrow::Table> table;
   PARQUET_THROW_NOT_OK(reader->RowGroup(0)->ReadTable(&table));
   std::cout << "Loaded " << table->num_rows() << " rows in " << table->num_columns()
@@ -132,8 +149,8 @@ void read_single_column() {
                                     arrow::default_memory_pool()));
 
   std::unique_ptr<parquet::arrow::FileReader> reader;
-  PARQUET_THROW_NOT_OK(
-      parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader));
+  PARQUET_ASSIGN_OR_THROW(reader,
+      parquet::arrow::OpenFile(infile, arrow::default_memory_pool()));
   std::shared_ptr<arrow::ChunkedArray> array;
   PARQUET_THROW_NOT_OK(reader->ReadColumn(0, &array));
   PARQUET_THROW_NOT_OK(arrow::PrettyPrint(*array, 4, &std::cout));
@@ -153,8 +170,8 @@ void read_single_column_chunk() {
                                     arrow::default_memory_pool()));
 
   std::unique_ptr<parquet::arrow::FileReader> reader;
-  PARQUET_THROW_NOT_OK(
-      parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader));
+  PARQUET_ASSIGN_OR_THROW(reader,
+      parquet::arrow::OpenFile(infile, arrow::default_memory_pool()));
   std::shared_ptr<arrow::ChunkedArray> array;
   PARQUET_THROW_NOT_OK(reader->RowGroup(0)->Column(0)->Read(&array));
   PARQUET_THROW_NOT_OK(arrow::PrettyPrint(*array, 4, &std::cout));
@@ -178,7 +195,6 @@ void print_schema(std::shared_ptr<arrow::Table>  table)
 
 }
 
-
 arrow::Status readfile(std::string file, std::vector<int> indicies,std::shared_ptr<arrow::Table> &table)
 {
     arrow::Status s;
@@ -188,26 +204,36 @@ arrow::Status readfile(std::string file, std::vector<int> indicies,std::shared_p
     if(!p.ok()){throw e;}
     infile = std::move(p).ValueOrDie();
     std::unique_ptr<parquet::arrow::FileReader> reader;
-    parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader);
-    if(NULL==reader.get()){throw e;}
+    arrow::MemoryPool* pool = arrow::default_memory_pool();
+    auto reader_properties = parquet::ReaderProperties(pool);
+    auto arrow_reader_props = parquet::ArrowReaderProperties(/*use_threads=*/true);
+    parquet::arrow::FileReaderBuilder reader_builder;
+    ARROW_RETURN_NOT_OK(reader_builder.OpenFile(file, /*memory_map=*/false, reader_properties));
+    reader_builder.memory_pool(pool);
+    reader_builder.properties(arrow_reader_props);
+    ARROW_ASSIGN_OR_RAISE(reader, reader_builder.Build());
     s=reader->ReadTable(indicies,&table);
-    if(!s.ok()){throw e;}
+    if(!s.ok()){
+        std::cout << s.ToString() << std::endl;
+        throw e;
+    }
     return s;
 }
 
-
 int writeparquetfile(std::string file,const arrow::Table& table) {
     std::shared_ptr<arrow::io::FileOutputStream> outfile;
-    //auto p = (arrow::io::ReadableFile::Open(file, arrow::default_memory_pool()));
-            auto p=arrow::io::FileOutputStream::Open(file, arrow::default_memory_pool());
-            if(!p.ok()){throw myexception;}
-            outfile = std::move(p).ValueOrDie();
-            arrow::Status s=parquet::arrow::WriteTable(table, arrow::default_memory_pool(), outfile, savechunksize);
-            if(!s.ok()){
-                throw myexception;}
+    auto p=arrow::io::FileOutputStream::Open(file, arrow::default_memory_pool());
+    if(!p.ok()){throw myexception;}
+    outfile = std::move(p).ValueOrDie();
+	arrow::Status st = table.Validate();
+    arrow::Status s=parquet::arrow::WriteTable(table,
+		arrow::default_memory_pool(), outfile, savechunksize, writerProps, arrowProps);
 
-           return 0;
+    if(!s.ok()){
+	    std::cout << "Cannot write to file: " << s.ToString() << std::endl;
+        throw myexception;}
 
+    return 0;
 }
 
 int ksettabletofile(K tab,std::string file)
@@ -252,8 +278,8 @@ arrow::Status getschema(std::string file, std::shared_ptr<arrow::Schema> &schema
         if(!p.ok()){throw myexception;}
         infile = std::move(p).ValueOrDie();
         std::unique_ptr<parquet::arrow::FileReader> reader;
-        parquet::arrow::OpenFile(infile, arrow::default_memory_pool(), &reader);
-        if(NULL==reader.get()){throw myexception;}
+        PARQUET_ASSIGN_OR_THROW(reader,
+            parquet::arrow::OpenFile(infile, arrow::default_memory_pool()));
         s = reader->GetSchema(&schema);
 
         if(!s.ok()){throw myexception;}
@@ -334,7 +360,7 @@ int arrowtabletokdb( K &ns, std::shared_ptr<arrow::Table> &table)
 
         kS(names)[i]=ss((char*)table->ColumnNames().at(i).c_str());
         //Get column name
-        tokdbfromarrow(mydata,table.get()->column(i));
+        toKdbFromArrow(mydata,table.get()->column(i));
         kK(values)[i]=mydata;
         //get column
 
@@ -363,7 +389,7 @@ int kstreamread(std::string file, std:: string callback)
 	    for(int j=0;j<nc;j++)
            { 
 	   try {
-           tokdbfromparquet(os,thisschema.get()->fields().at(j)->type()->ToString(),field);
+           toKdbFromParquet(os,thisschema.get()->fields().at(j), field);
            kK(row)[j]=field;
 	   } catch(...)
 	    {
