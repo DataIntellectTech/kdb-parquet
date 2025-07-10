@@ -1,6 +1,9 @@
 // To DO. Deal with chunks.
 // Add more data types.
 // String Int32 Int 64 and double done.
+
+#include "base.hpp"
+
 int arrowtoint32vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
 int n=arrow->length();
@@ -89,30 +92,17 @@ int arrowtoBoolvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     return 0;
 }
 
-int arrowtoTimestampUSvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToTimestampVector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow, int scale)
 {
     int n=arrow->length();
-    auto time64_array = std::static_pointer_cast<arrow::TimestampArray>(arrow->chunk(0));
+    auto time_array = std::static_pointer_cast<arrow::TimestampArray>(arrow->chunk(0));
     ns=ktn(KP,n);
-    //This is number of US since 1970.01.01D00:00:00.000.
     for(int i=0;i<n;i++) {
-        kJ(ns)[i]=(1000*((long)time64_array->Value(i)))-946684800000000000;
+        kJ(ns)[i]=(scale*((long)time_array->Value(i)))-EPOCH_DIFF;
     }
     return 0;
 }
 
-int arrowtoTimestampMSvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
-{
-    int n=arrow->length();
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
-    auto time32_array = std::static_pointer_cast<arrow::TimestampArray>(arrow->chunk(0));
-    ns=ktn(KP,n);
-    //This is number of MS since 1970.01.01D00:00:00.000.
-    for(int i=0;i<n;i++) {
-        kJ(ns)[i]=(1000000*((long)time32_array->Value(i)))-946684800000000000;
-    }
-    return 0;
-}
 int arrowtoTimevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
@@ -234,15 +224,23 @@ int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
 
        arrowtoTime64vector(ns,arrow,1000);
    }
+   // In theory, second precision should not happen because parquet coerces timestamp[s] to timestamp[ms] on the write.
+   // However, we'll leave this here on the off chance the behaviour changes and seconds are supported.
+   else if(thistype.rfind("timestamp[s") == 0)
+   {
+       arrowToTimestampVector(ns, arrow, 1000000000);
+   }
    else if(thistype.rfind("timestamp[ms") == 0)
    {
-
-       arrowtoTimestampMSvector(ns,arrow);
+       arrowToTimestampVector(ns, arrow, 1000000);
    }
    else if(thistype.rfind("timestamp[us") == 0)
    {
-
-       arrowtoTimestampUSvector(ns,arrow);
+       arrowToTimestampVector(ns, arrow, 1000);
+   }
+   else if(thistype.rfind("timestamp[ns") == 0)
+   {
+       arrowToTimestampVector(ns, arrow, 1);
    }
    else if(thistype=="date32[day]")
    {

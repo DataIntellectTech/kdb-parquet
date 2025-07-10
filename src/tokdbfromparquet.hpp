@@ -1,3 +1,5 @@
+#include "base.hpp"
+
 int tokdbfromparquet( NewStreamReader &os,std::string thistype, K &x) {
       int64_t int64;
       char ch;
@@ -12,6 +14,7 @@ int tokdbfromparquet( NewStreamReader &os,std::string thistype, K &x) {
       bool myboolean;
       std::string stringarray;
       std::chrono::milliseconds ts_ms;
+      std::chrono::microseconds ts_us;
       int i;
    if(thistype=="double") {
       os>>dble;
@@ -73,15 +76,39 @@ int tokdbfromparquet( NewStreamReader &os,std::string thistype, K &x) {
        x=(K)0;
        throw myexception;
    }
-   else if(thistype.rfind("timestamp[ms") == 0)
-   {  
+   // In theory, second precision should not happen because parquet coerces timestamp[s] to timestamp[ms] on the write.
+   // However, we'll leave this here on the off chance the behaviour changes and seconds are supported.
+   else if(thistype.rfind("timestamp[s") == 0)
+   {
        os>>int64;
-       x=ktj(-KP,1000*int64);
+       x=ktj(-KP,1000000000*int64 - EPOCH_DIFF);
+   }
+   // The underlying types of milliseconds and microseconds differentiate depending on whether they contain a time zone
+   // or not. Thus, we handle each separately.
+   else if(thistype == "timestamp[ms]")
+   {
+       os>>int64;
+       x=ktj(-KP,1000000*int64 - EPOCH_DIFF);
+   }
+   else if(thistype.rfind("timestamp[ms") == 0)
+   {
+       os>>ts_ms;
+       x=ktj(-KP,1000000*ts_ms.count() - EPOCH_DIFF);
+   }
+   else if(thistype == "timestamp[us]") {
+       os>>int64;
+       x=ktj(-KP,1000*int64 - EPOCH_DIFF);
    }
    else if(thistype.rfind("timestamp[us") == 0)
-   {  
+   {
+       os>>ts_us;
+       x=ktj(-KP,1000*ts_us.count() - EPOCH_DIFF);
+   }
+   // The underlying data type of nanoseconds is always int64.
+   else if(thistype.rfind("timestamp[ns") == 0)
+   {
        os>>int64;
-       x=ktj(-KP,int64);
+       x=ktj(-KP,int64 - EPOCH_DIFF);
    }
    else if(thistype=="date32[day]")
    {

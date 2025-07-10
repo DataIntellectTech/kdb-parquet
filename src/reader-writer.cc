@@ -41,8 +41,15 @@ public:
     }
 
 };
+
 arrow::Status s;
 std::exception myexception;
+
+// The following are required to be able to save timestamps with nanosecond precision, which is desirable since kdb
+// timestamps are in nanoseconds.
+auto writerProps = parquet::WriterProperties::Builder().version(parquet::ParquetVersion::PARQUET_2_0)->build();
+auto arrowProps = parquet::ArrowWriterProperties::Builder().coerce_timestamps(arrow::TimeUnit::NANO)->build();
+
 #include "tokdbfromarrow.hpp"
 #include "fromkdbtoarrow.hpp"
 #include "tokdbfromparquet.hpp"
@@ -198,16 +205,18 @@ arrow::Status readfile(std::string file, std::vector<int> indicies,std::shared_p
 
 int writeparquetfile(std::string file,const arrow::Table& table) {
     std::shared_ptr<arrow::io::FileOutputStream> outfile;
-    //auto p = (arrow::io::ReadableFile::Open(file, arrow::default_memory_pool()));
-            auto p=arrow::io::FileOutputStream::Open(file, arrow::default_memory_pool());
-            if(!p.ok()){throw myexception;}
-            outfile = std::move(p).ValueOrDie();
-            arrow::Status s=parquet::arrow::WriteTable(table, arrow::default_memory_pool(), outfile, savechunksize);
-            if(!s.ok()){
-                throw myexception;}
+    auto p=arrow::io::FileOutputStream::Open(file, arrow::default_memory_pool());
+    if(!p.ok()){throw myexception;}
+    outfile = std::move(p).ValueOrDie();
+	arrow::Status st = table.Validate();
+    arrow::Status s=parquet::arrow::WriteTable(table,
+		arrow::default_memory_pool(), outfile, savechunksize, writerProps, arrowProps);
 
-           return 0;
+    if(!s.ok()){
+	    std::cout << "Cannot write to file: " << s.ToString() << std::endl;
+        throw myexception;}
 
+    return 0;
 }
 
 int ksettabletofile(K tab,std::string file)
