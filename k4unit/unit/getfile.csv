@@ -20,6 +20,6 @@ run,0,0,q,.pq.settabletofile[`here;nulltab],1,,saves table full of nulls
 true,0,0,q,nulltab~.pq.getfile[`here],1,,tests whether nulltab read back in correc tly
 run,0,0,q,hdel `:here,1,,
 run,0,0,q,hdel `:there,1,,
-
+true,0,0,q,.test.all_types~.pq.getfile getdatafile"all_types.parquet",1,,
 
 
