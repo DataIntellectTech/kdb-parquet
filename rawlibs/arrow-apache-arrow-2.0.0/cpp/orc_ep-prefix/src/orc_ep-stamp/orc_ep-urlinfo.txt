@@ -1,3 +1,0 @@
-repository='external project URL'
-module='https://github.com/apache/orc/archive/rel/release-1.6.2.tar.gz;https://github.com/ursa-labs/thirdparty/releases/download/latest/orc-1.6.2.tar.gz'
-tag=''

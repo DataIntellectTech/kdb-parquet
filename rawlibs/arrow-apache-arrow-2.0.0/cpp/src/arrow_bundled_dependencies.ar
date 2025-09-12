@@ -1,9 +1,0 @@
-CREATE /home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/src/debug/libarrow_bundled_dependencies.a
-ADDLIB /home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/src/boost_ep-prefix/src/boost_ep/stage/lib/libboost_system.a
-ADDLIB /home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/src/boost_ep-prefix/src/boost_ep/stage/lib/libboost_filesystem.a
-ADDLIB /home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/src/boost_ep-prefix/src/boost_ep/stage/lib/libboost_regex.a
-ADDLIB /home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/src/thrift_ep-install/lib/libthriftd.a
-ADDLIB /home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/src/jemalloc_ep-prefix/src/jemalloc_ep/dist//lib/libjemalloc_pic.a
-ADDLIB /home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/src/utf8proc_ep-install/lib/libutf8proc.a
-SAVE
-END

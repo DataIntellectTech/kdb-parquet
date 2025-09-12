@@ -11,4 +11,5 @@ fail,0,0,q,.pq.getfilebycols[getdatafile "doesntexist.parquet";`age`full_name],1
 true,0,0,q,`error=.[.pq.getfilebycols;(getdatafile "doesntexist.parquet";`age`fullname);{[x] `$x}],1,,Check that error returned is `error`
 fail,0,0,q,.pq.getfilebycols[getdatafile "info.txt";`age`fullname],1,,Repeat test  witha file that exists but isnt a parquet file [ Morris ]
 fail,0,0,q,.pq.getfilebycols[getdatafile doesntexist.parquet;1 2],1,,Repeat test w itha file that doesnt exist [ Morris ]
-fail,0,0,q,.pq.getfilebycols[getdatafile "info.txt";1 2],1,, 
+fail,0,0,q,.pq.getfilebycols[getdatafile "info.txt";1 2],1,,
+true,0,0,q,.pq.getfilebycols[getdatafile"all_types.parquet";`float`date32`int64`timestamp_us_utc]~`float`date32`int64`timestamp_us_utc#.test.all_types,1,,

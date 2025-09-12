@@ -11,4 +11,7 @@ true,0,0,q,t ~tab1,1,,
 run,0,0,q,hdel `:time32kdb.parquet,1,,
 run,0,0,q,hdel `:time32python.parquet,1,,
 
-
+run,0,0,q,@[system;" "sv("rm";string getdatafile"tmp_all_q_types.parquet";"2>/dev/null");::];,1,,in case previous run failed
+run,0,0,q,.pq.settabletofile[getdatafile"tmp_all_q_types.parquet";.test.all_q_types],1,,
+true,0,0,q,.test.convAllQTypes[]~.pq.getfile getdatafile"tmp_all_q_types.parquet",1,,
+run,0,0,q,system" "sv("rm";string getdatafile"tmp_all_q_types.parquet"),1,,

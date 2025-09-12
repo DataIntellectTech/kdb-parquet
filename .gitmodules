@@ -1,0 +1,3 @@
+[submodule "rawlibs/arrow"]
+	path = rawlibs/arrow
+	url = git@github.com:apache/arrow.git

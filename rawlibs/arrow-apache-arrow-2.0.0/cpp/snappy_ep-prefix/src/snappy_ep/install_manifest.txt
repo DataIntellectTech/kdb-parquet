@@ -1,9 +1,0 @@
-/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/snappy_ep/src/snappy_ep-install/lib/libsnappy.a
-/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/snappy_ep/src/snappy_ep-install/include/snappy-c.h
-/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/snappy_ep/src/snappy_ep-install/include/snappy-sinksource.h
-/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/snappy_ep/src/snappy_ep-install/include/snappy.h
-/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/snappy_ep/src/snappy_ep-install/include/snappy-stubs-public.h
-/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/snappy_ep/src/snappy_ep-install/lib/cmake/Snappy/SnappyTargets.cmake
-/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/snappy_ep/src/snappy_ep-install/lib/cmake/Snappy/SnappyTargets-debug.cmake
-/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/snappy_ep/src/snappy_ep-install/lib/cmake/Snappy/SnappyConfig.cmake
-/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/snappy_ep/src/snappy_ep-install/lib/cmake/Snappy/SnappyConfigVersion.cmake

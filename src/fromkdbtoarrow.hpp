@@ -1,6 +1,9 @@
 // To DO. Deal with chunks.
 // Add more data types.
 // String Int32 Int 64 and double done.
+
+#include "base.hpp"
+
 int kdbtoarrowint32vector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& array)
 {
     arrow::Int32Builder i32builder;
@@ -93,9 +96,9 @@ int kdbtoarrowDate32vector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& ar
 {
 
     arrow::Date32Builder date32builder;
-    //Parquet dates are from 1970.01.01. this need to add on 10957 days.
+    //Parquet dates are from 1970.01.01. this need to add on DATE_EPOCH_DIFF days.
     for(int i=0;i<ns->n;i++) {
-        int m=((int)kI(ns)[i])+10957;
+        int m=((int)kI(ns)[i])+DATE_EPOCH_DIFF;
         date32builder.Append(m);
     }
     std::shared_ptr<arrow::Array> date32array;
@@ -105,12 +108,11 @@ int kdbtoarrowDate32vector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& ar
 }
 int kdbtoarrowTimestampvector(K &ns, std::vector<std::shared_ptr<arrow::Array>>& array)
 {
-    auto timestamp_type = std::make_shared<arrow::TimestampType>(arrow::TimeUnit::MICRO);
-     arrow::TimestampBuilder timestampbuilder(timestamp_type,arrow::default_memory_pool());
-    //Parquet timestamps are are from midnight 1970.01.01. this need to add 946684800000000 on  microseconds. `long$1970.01.01D00:00:00.000
-    //I cant seem to get this to create a nanosecond object. hence Ive left it as is.
-     for(int i=0;i<ns->n;i++) {
-        long long m=(long)((long)(kJ(ns)[i])/1000)+946684800000000;
+    auto timestamp_type = std::make_shared<arrow::TimestampType>(arrow::TimeUnit::NANO);
+    arrow::TimestampBuilder timestampbuilder(timestamp_type,arrow::default_memory_pool());
+    // Parquet timestamps are are from midnight 1970.01.01. Need to add `TS_EPOCH_DIFF` to match kdb's 2000.01.01 epoch.
+    for(int i=0;i<ns->n;i++) {
+        long long m = ((long)(kJ(ns)[i])) + TS_EPOCH_DIFF;
         timestampbuilder.Append(m);
     }
     std::shared_ptr<arrow::Array> timestamparray;
@@ -155,7 +157,7 @@ std::shared_ptr<arrow::Field>createfield(std::string name,int ktype){
         case(9): return arrow::field(name,arrow::float64());
         case(10): return arrow::field(name,arrow::utf8());
         case(11): return arrow::field(name,arrow::utf8());
-        case(12): return arrow::field(name,arrow::timestamp(arrow::TimeUnit::MICRO));
+        case(12): return arrow::field(name,arrow::timestamp(arrow::TimeUnit::NANO));
         case(14): return arrow::field(name,arrow::date32());
         case(19): return arrow::field(name,arrow::time32(arrow::TimeUnit::MILLI));
         default: ;

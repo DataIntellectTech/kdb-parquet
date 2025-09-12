@@ -1,1 +1,0 @@
-cmd='./bootstrap.sh;--prefix=/home/james/CLionProjects/PQ/rawlibs/arrow-apache-arrow-2.0.0/cpp/src/boost_ep-prefix/src/boost_ep;--with-libraries=filesystem,regex,system'

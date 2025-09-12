@@ -1,4 +1,4 @@
 action,ms,bytes,lang,code,repeat,minver,comment
 fail,0,0,q,fail,0,0,q,q).pq.streamread[2;getdatafile "simple_example.parquet"]
 ,1,,Check function doesnt seg with a bad argument
-
+true,0,0,q,.test.all_types~.test.streamRead[getdatafile"all_types.parquet";key flip .test.all_types],1,,

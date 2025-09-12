@@ -1,18 +1,21 @@
 // To DO. Deal with chunks.
 // Add more data types.
 // String Int32 Int 64 and double done.
-int arrowtoint32vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+
+#include "base.hpp"
+
+int arrowToInt32Vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
-int n=arrow->length();
-  ns=ktn(KI,n);
+    int n=arrow->length();
+    ns=ktn(KI,n);
     auto int32_array = std::static_pointer_cast<arrow::Int32Array>(arrow->chunk(0));
-for(int i=0;i<n;i++) {
- kI(ns)[i]= (int)int32_array->Value(i);
-}
+    for(int i=0;i<n;i++) {
+        kI(ns)[i]= (int)int32_array->Value(i);
+    }
     return 0;
 }
 
-int arrowtouint32vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToUInt32Vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
     ns=ktn(KJ,n);
@@ -22,7 +25,7 @@ int arrowtouint32vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     }
     return 0;
 }
-int arrowtouint64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToUInt64Vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
     ns=ktn(KF,n);
@@ -33,7 +36,7 @@ int arrowtouint64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     }
     return 0;
 }
-int arrowtouint16vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToUInt16Vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
     ns=ktn(KI,n);
@@ -43,7 +46,7 @@ int arrowtouint16vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     }
     return 0;
 }
-int arrowtoint64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToInt64Vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
     auto int64_array = std::static_pointer_cast<arrow::Int64Array>(arrow->chunk(0));
@@ -53,10 +56,9 @@ int arrowtoint64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     }
     return 0;
 }
-int arrowtoStringvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToStringVector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
     auto String_array = std::static_pointer_cast<arrow::StringArray>(arrow->chunk(0));
     ns=ktn(0,n);
     for(int i=0;i<n;i++) {
@@ -66,10 +68,9 @@ int arrowtoStringvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     }
     return 0;
 }
-int arrowtoDoublevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToDoubleVector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
     auto double_array = std::static_pointer_cast<arrow::DoubleArray>(arrow->chunk(0));
     ns=ktn(KF,n);
     for(int i=0;i<n;i++) {
@@ -77,10 +78,9 @@ int arrowtoDoublevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     }
     return 0;
 }
-int arrowtoBoolvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToBoolVector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
     auto boolean_array = std::static_pointer_cast<arrow::BooleanArray>(arrow->chunk(0));
     ns=ktn(KB,n);
     for(int i=0;i<n;i++) {
@@ -89,34 +89,20 @@ int arrowtoBoolvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     return 0;
 }
 
-int arrowtoTimestampUSvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToTimestampVector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow, int scale)
 {
     int n=arrow->length();
-    auto time64_array = std::static_pointer_cast<arrow::TimestampArray>(arrow->chunk(0));
+    auto time_array = std::static_pointer_cast<arrow::TimestampArray>(arrow->chunk(0));
     ns=ktn(KP,n);
-    //This is number of US since 1970.01.01D00:00:00.000.
     for(int i=0;i<n;i++) {
-        kJ(ns)[i]=(1000*((long)time64_array->Value(i)))-946684800000000000;
+        kJ(ns)[i]=(scale*((long)time_array->Value(i)))-TS_EPOCH_DIFF;
     }
     return 0;
 }
 
-int arrowtoTimestampMSvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToTimeVector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
-    auto time32_array = std::static_pointer_cast<arrow::TimestampArray>(arrow->chunk(0));
-    ns=ktn(KP,n);
-    //This is number of MS since 1970.01.01D00:00:00.000.
-    for(int i=0;i<n;i++) {
-        kJ(ns)[i]=(1000000*((long)time32_array->Value(i)))-946684800000000000;
-    }
-    return 0;
-}
-int arrowtoTimevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
-{
-    int n=arrow->length();
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
     auto time32_array = std::static_pointer_cast<arrow::Time32Array>(arrow->chunk(0));
     ns=ktn(KT,n);
     for(int i=0;i<n;i++) {
@@ -125,10 +111,9 @@ int arrowtoTimevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     return 0;
 }
 
-int arrowtoTime64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow,int mult)
+int arrowToTime64Vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow,int mult)
 {
     int n=arrow->length();
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
     auto time64_array = std::static_pointer_cast<arrow::Time64Array>(arrow->chunk(0));
     ns=ktn(KN,n);
     for(int i=0;i<n;i++) {
@@ -137,29 +122,28 @@ int arrowtoTime64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow,int mu
     return 0;
 }
 
-int arrowtoDatevector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToDateVector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
-//   std::shared_ptr<arrow::Int32Array> arrow_int32_array = (arrow::Int32Array)(arrow);
     auto date32_array = std::static_pointer_cast<arrow::Date32Array>(arrow->chunk(0));
     ns=ktn(KD,n);
     for(int i=0;i<n;i++) {
-	    //Parquet date format is offset since 1970.01.01. this we need to subtract 10957 to turn to kdb date.
-        kI(ns)[i]=((int)date32_array->Value(i))-10957;
+	    //Parquet date format is offset since 1970.01.01. this we need to subtract DATE_EPOCH_DIFF to turn to kdb date.
+        kI(ns)[i]=((int)date32_array->Value(i))-DATE_EPOCH_DIFF;
     }
     return 0;
 }
-int arrowtofloat32vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToFloat32Vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
     auto float32_array = std::static_pointer_cast<arrow::FloatArray>(arrow->chunk(0));
-    ns=ktn(KF,n);
+    ns=ktn(KE,n);
     for(int i=0;i<n;i++) {
-        kF(ns)[i]=(double)float32_array->Value(i);
+        kE(ns)[i]=(float)float32_array->Value(i);
     }
     return 0;
 }
-int arrowtofloat64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToFloat64Vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
     auto date32_array = std::static_pointer_cast<arrow::Date32Array>(arrow->chunk(0));
@@ -169,7 +153,7 @@ int arrowtofloat64vector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     }
     return 0;
 }
-int arrowtoNullvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
+int arrowToNullVector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
 {
     int n=arrow->length();
     ns=ktn(0,n);
@@ -179,87 +163,57 @@ int arrowtoNullvector(K &ns, std::shared_ptr<arrow::ChunkedArray> arrow)
     return 0;
 }
 
-int tokdbfromarrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
+int toKdbFromArrow(K &ns,std::shared_ptr<arrow::ChunkedArray> arrow)
 {
-  std::string thistype=  arrow->type()->ToString();
-    if(thistype=="double") {
-       arrowtoDoublevector(ns,arrow);
-   }else if(thistype=="float")
-   {  arrowtofloat32vector(ns,arrow);
+    arrow::Type::type typ = arrow->type()->id();
 
-   } else if(thistype=="int64")
-   {  arrowtoint64vector(ns,arrow);
+    if (typ == arrow::Type::type::DOUBLE)
+        arrowToDoubleVector(ns, arrow);
+    else if (typ == arrow::Type::type::FLOAT)
+        arrowToFloat32Vector(ns, arrow);
+    else if (typ == arrow::Type::type::STRING)
+        arrowToStringVector(ns, arrow);
+    else if (typ == arrow::Type::type::INT32)
+        arrowToInt32Vector(ns, arrow);
+    else if (typ == arrow::Type::type::UINT16)
+        arrowToUInt16Vector(ns, arrow);
+    else if (typ == arrow::Type::type::UINT32)
+        arrowToUInt32Vector(ns, arrow);
+    else if (typ == arrow::Type::type::UINT64)
+        arrowToUInt64Vector(ns, arrow);
+    else if (typ == arrow::Type::type::BOOL)
+        arrowToBoolVector(ns, arrow);
+    else if (typ == arrow::Type::type::TIME32)
+        arrowToTimeVector(ns, arrow);
+    else if (typ == arrow::Type::type::DATE32)
+        arrowToDateVector(ns, arrow);
+    else if (typ == arrow::Type::type::NA)
+        arrowToNullVector(ns, arrow);
+    else if (typ == arrow::Type::type::INT64)
+        arrowToInt64Vector(ns, arrow);
+    else if (arrow->type()->id() == arrow::Type::type::TIME64 ||
+             arrow->type()->id() == arrow::Type::type::TIMESTAMP)
+    {
+        int precision = 1;
+        if(arrow->type()->id() == arrow::Type::type::TIME64)
+        {
+            if(((arrow::TimeType*)(arrow->type().get()))->unit() == arrow::TimeUnit::MICRO) precision = 1000;
+            arrowToTime64Vector(ns,arrow,precision);
+        }
+        else if (arrow->type()->id() == arrow::Type::type::TIMESTAMP)
+        {
+            const auto& type = (arrow::TimestampType*)(arrow->type().get());
+            if      (type->unit() == arrow::TimeUnit::SECOND)   precision = 1000000000;
+            else if (type->unit() == arrow::TimeUnit::MILLI)    precision = 1000000;
+            else if (type->unit() == arrow::TimeUnit::MICRO)    precision = 1000;
+            arrowToTimestampVector(ns,arrow,precision);
+        }
+    }
+    else
+    {
+        ns=ktn(0,0);
+    }
 
-   }else if(thistype=="string")
-   {
-       arrowtoStringvector(ns,arrow);
-   }
-   else if(thistype=="int32")
-   {
-
-       arrowtoint32vector(ns,arrow);
-   }
-   else if(thistype=="uint16")
-   {
-
-       arrowtouint16vector(ns,arrow);
-   }
-   else if(thistype=="uint32")
-   {
-
-       arrowtouint32vector(ns,arrow);
-   }
-   else if(thistype=="uint64")
-   {
-
-       arrowtouint64vector(ns,arrow);
-   }
-   else if(thistype=="bool")
-   {
-
-       arrowtoBoolvector(ns,arrow);
-   }
-   else if(thistype=="time32[ms]")
-   {
-
-       arrowtoTimevector(ns,arrow);
-   }
-   else if(thistype=="time64[ns]")
-   {
-
-       arrowtoTime64vector(ns,arrow,1);
-   }
-   else if(thistype=="time64[us]")
-   {
-
-       arrowtoTime64vector(ns,arrow,1000);
-   }
-   else if(thistype.rfind("timestamp[ms") == 0)
-   {
-
-       arrowtoTimestampMSvector(ns,arrow);
-   }
-   else if(thistype.rfind("timestamp[us") == 0)
-   {
-
-       arrowtoTimestampUSvector(ns,arrow);
-   }
-   else if(thistype=="date32[day]")
-   {
-
-       arrowtoDatevector(ns,arrow);
-   }
-   else if(thistype=="null")
-   {
-
-       arrowtoNullvector(ns,arrow);
-   }
-   else
-   {
-    ns=ktn(0,0);
-    //   throw myexception;
-   }
-
-  return 0;
+    return 0;
 }
 

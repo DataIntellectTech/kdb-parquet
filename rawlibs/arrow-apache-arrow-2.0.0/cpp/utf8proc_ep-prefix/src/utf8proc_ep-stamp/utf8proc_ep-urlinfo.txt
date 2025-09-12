@@ -1,3 +1,0 @@
-repository='external project URL'
-module='https://github.com/JuliaStrings/utf8proc/archive/v2.5.0.tar.gz'
-tag=''
